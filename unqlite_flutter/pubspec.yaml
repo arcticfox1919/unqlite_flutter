@@ -31,9 +31,9 @@ flutter:
     platforms:
       android:
         package: xyz.bczl.unqlite_flutter
-        pluginClass: UnqliteFlutterPlugin
+        pluginClass: UnqliteFlutter
       ios:
-        pluginClass: UnqliteFlutterPlugin
+        pluginClass: UnqliteFlutter
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

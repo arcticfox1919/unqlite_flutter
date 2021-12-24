@@ -11,7 +11,7 @@ String _libPath= '';
 
 set libPath(String path) => _libPath=path;
 
-_load() {
+ffi.DynamicLibrary _load() {
   var path = _libPath.isNotEmpty ? _libPath : "libunqlite.so";
 
   if (Platform.isWindows) {
@@ -84,6 +84,18 @@ class UnQLiteHelper {
     }
     return r == UNQLITE_OK;
   }
+
+  void exec(String str){
+    ffi.Pointer<ffi.Pointer<unqlite_vm>> ppVM = calloc();
+    var rc = _unqlite.unqlite_compile(_pdb, str.toNativeUtf8().cast(), str.length, ppVM);
+
+    if(rc == UNQLITE_OK){
+      print('=====================');
+    }
+
+    // _unqlite.unqlite_vm_exec(pVm)
+  }
+
 
   bool _write(String k, String v, _WriteData fn) {
     var key = k.toNativeUtf8();

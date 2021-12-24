@@ -1,4 +1,7 @@
 *.iml
+.DS_Store
+build_tool/.DS_Store
+unqlite-1.1.9/.DS_Store
 
 /build_tool/build
 /build_tool/output
