@@ -18,11 +18,10 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+    initDatabase();
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
+  Future<void> initDatabase() async {
     var appDocDir = await getApplicationDocumentsDirectory();
 
     UnQLiteHelper helper = UnQLiteHelper("${appDocDir.path}/test.db");
@@ -30,8 +29,8 @@ class _MyAppState extends State<MyApp> {
     helper.store("age", "18");
 
 
-    print(helper.fetch("name"));
-    print(helper.fetch("age"));
+    debugPrint(helper.fetch("name"));
+    debugPrint(helper.fetch("age"));
     helper.close();
   }
 
@@ -40,7 +39,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('UnQLite app'),
         ),
         body: Center(
           child: Text('Running on'),
