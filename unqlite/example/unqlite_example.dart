@@ -7,42 +7,47 @@ void main() {
   print(unqlite.fetch("name"));
   print(unqlite.fetch("age"));
 
-  unqlite.execute('''
-if( !db_exists('users') ){
+  unqlite.append("age", "19");
+  unqlite.fetchCallback("age", (value) {
+    print(value);
+  });
 
-    /* Try to create it */
+//   unqlite.execute('''
+// if( !db_exists('users') ){
 
-   db_create('users');
-}
+//     /* Try to create it */
 
-\$zRec = [
+//    db_create('users');
+// }
 
-{
-   name : 'james',
-   age  : 27,
-   mail : 'dude@example.com'
-},
+// \$zRec = [
 
-{
-   name : 'robert',
-   age  : 35,
-   mail : 'rob@example.com'
-},
+// {
+//    name : 'james',
+//    age  : 27,
+//    mail : 'dude@example.com'
+// },
 
-{
-   name : 'monji',
-   age  : 47,
-   mail : 'monji@example.com'
-},
-{
-  name : 'barzini',
-  age  : 52,
-  mail : 'barz@mobster.com'
-}
-];
+// {
+//    name : 'robert',
+//    age  : 35,
+//    mail : 'rob@example.com'
+// },
 
-db_store('users',\$zRec);
-    ''');
+// {
+//    name : 'monji',
+//    age  : 47,
+//    mail : 'monji@example.com'
+// },
+// {
+//   name : 'barzini',
+//   age  : 52,
+//   mail : 'barz@mobster.com'
+// }
+// ];
+
+// db_store('users',\$zRec);
+//     ''');
 
   unqlite.close();
 }

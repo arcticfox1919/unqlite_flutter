@@ -5,6 +5,8 @@ import 'package:ffi/ffi.dart';
 
 import 'unqlite_bindings.dart';
 
+typedef FetchCallback = void Function(String value);
+
 String _libPath = '';
 
 set libPath(String path) => _libPath = path;
@@ -23,9 +25,6 @@ ffi.DynamicLibrary _load() {
   return ffi.DynamicLibrary.open(path);
 }
 
-typedef FetchCallback = ffi.Int32 Function(
-    ffi.Pointer, ffi.Uint32, ffi.Pointer);
-
 typedef _WriteData = int Function(
   ffi.Pointer<unqlite>,
   ffi.Pointer<ffi.Void>,
@@ -33,6 +32,8 @@ typedef _WriteData = int Function(
   ffi.Pointer<ffi.Void>,
   int,
 );
+
+final Map<int, FetchCallback> _listener = {};
 
 class UnQLite {
   final ffi.DynamicLibrary _dylib;
@@ -62,11 +63,11 @@ class UnQLite {
     return _write(key, value, _unqlite.unqlite_kv_append);
   }
 
-  bool delete(String k) {
-    var key = k.toNativeUtf8();
+  bool delete(String key) {
+    var k = key.toNativeUtf8();
     int r;
     try {
-      r = _unqlite.unqlite_kv_delete(_pdb, key.cast(), -1);
+      r = _unqlite.unqlite_kv_delete(_pdb, k.cast(), -1);
       // TODO:
       if (r != UNQLITE_OK) {
         if (r != UNQLITE_BUSY && r != UNQLITE_NOTFOUND) {
@@ -77,7 +78,7 @@ class UnQLite {
     } catch (e) {
       rethrow;
     } finally {
-      calloc.free(key);
+      malloc.free(k);
     }
     return r == UNQLITE_OK;
   }
@@ -85,27 +86,41 @@ class UnQLite {
   bool exists(String key) {
     var k = key.toNativeUtf8();
     // ignore: omit_local_variable_types
-    ffi.Pointer<ffi.Int64> pLen = calloc();
+    ffi.Pointer<ffi.Int64> pLen = malloc();
     int r;
     bool b = false;
-    r = _unqlite.unqlite_kv_fetch(_pdb, k.cast(), -1, ffi.nullptr, pLen);
-    if (r == UNQLITE_OK) {
-      b = true;
-    } else if (r == UNQLITE_NOTFOUND) {
-      b = false;
-    } else if (r == UNQLITE_IOERR) {
-      throw Exception("Data fetch failed!");
+
+    try {
+      r = _unqlite.unqlite_kv_fetch(_pdb, k.cast(), -1, ffi.nullptr, pLen);
+      if (r == UNQLITE_OK) {
+        b = true;
+      } else if (r == UNQLITE_NOTFOUND) {
+        b = false;
+      } else if (r == UNQLITE_IOERR) {
+        throw Exception("Data fetch failed!");
+      }
+    } catch (e) {
+      rethrow;
+    } finally {
+      malloc.free(pLen);
     }
     return b;
   }
 
   void execute(String str) {
-    ffi.Pointer<ffi.Pointer<unqlite_vm>> ppVM = calloc();
-    var rc = _unqlite.unqlite_compile(
-        _pdb, str.toNativeUtf8().cast(), str.length, ppVM);
+    ffi.Pointer<ffi.Pointer<unqlite_vm>> ppVM = malloc();
 
-    if (rc != UNQLITE_OK) {
-      throw Exception("execute failed!");
+    try {
+      var rc = _unqlite.unqlite_compile(
+          _pdb, str.toNativeUtf8().cast(), str.length, ppVM);
+
+      if (rc != UNQLITE_OK) {
+        throw Exception("execute failed!");
+      }
+    } catch (e) {
+      rethrow;
+    } finally {
+      malloc.free(ppVM);
     }
 
     // _unqlite.unqlite_vm_exec(pVm)
@@ -120,24 +135,24 @@ class UnQLite {
     } catch (e) {
       rethrow;
     } finally {
-      calloc.free(key);
-      calloc.free(val);
+      malloc.free(key);
+      malloc.free(val);
     }
     return r == UNQLITE_OK;
   }
 
-  String? fetch(String k) {
-    var key = k.toNativeUtf8();
+  String? fetch(String key) {
+    var k = key.toNativeUtf8();
     ffi.Pointer<Utf8>? pVal;
     // ignore: omit_local_variable_types
-    ffi.Pointer<ffi.Int64> pLen = calloc();
+    ffi.Pointer<ffi.Int64> pLen = malloc();
     int r;
     try {
-      r = _unqlite.unqlite_kv_fetch(_pdb, key.cast(), -1, ffi.nullptr, pLen);
+      r = _unqlite.unqlite_kv_fetch(_pdb, k.cast(), -1, ffi.nullptr, pLen);
       if (r == UNQLITE_OK) {
         var len = pLen.value;
-        pVal = calloc<ffi.Uint8>(len).cast<Utf8>();
-        r = _unqlite.unqlite_kv_fetch(_pdb, key.cast(), -1, pVal.cast(), pLen);
+        pVal = malloc<ffi.Uint8>(len).cast<Utf8>();
+        r = _unqlite.unqlite_kv_fetch(_pdb, k.cast(), -1, pVal.cast(), pLen);
         if (r == UNQLITE_OK) {
           return pVal.toDartString(length: len);
         } else if (r == UNQLITE_IOERR) {
@@ -150,9 +165,23 @@ class UnQLite {
     } catch (e) {
       rethrow;
     } finally {
-      calloc.free(key);
-      calloc.free(pLen);
-      if (pVal != null) calloc.free(pVal);
+      malloc.free(k);
+      malloc.free(pLen);
+      if (pVal != null) malloc.free(pVal);
+    }
+  }
+
+  void fetchCallback(String key, FetchCallback callback) {
+    _listener[callback.hashCode] = callback;
+    ffi.Pointer<ffi.Uint64> hash = malloc();
+    hash.value = callback.hashCode;
+
+    var k = key.toNativeUtf8();
+    int r = _unqlite.unqlite_kv_fetch_callback(_pdb, k.cast(), -1,
+        ffi.Pointer.fromFunction(_callback, 0), hash.cast<ffi.Void>());
+
+    if (r != UNQLITE_OK) {
+      throw Exception("Data fetch failed! The return value is $r .");
     }
   }
 
@@ -160,10 +189,20 @@ class UnQLite {
     _unqlite.unqlite_close(_pdb);
   }
 
-  static int _callback(ffi.Pointer pData, int dataLen, ffi.Pointer pUserData) {
-    var p = pData.cast<Utf8>();
-    print(p.toDartString(length: dataLen));
+  static int _callback(ffi.Pointer<ffi.Void> pData, int dataLen,
+      ffi.Pointer<ffi.Void> pUserData) {
+    ffi.Pointer<ffi.Uint64> pHash = pUserData.cast();
+    int hashCode = pHash.value;
 
-    return UNQLITE_OK;
+    var pValue = pData.cast<Utf8>();
+    if (_listener[hashCode] != null) {
+      FetchCallback callback = _listener[hashCode]!;
+      callback(pValue.toDartString(length: dataLen));
+      _listener.remove(hashCode);
+      malloc.free(pHash);
+      return UNQLITE_OK;
+    }
+    malloc.free(pHash);
+    return UNQLITE_ABORT;
   }
 }
