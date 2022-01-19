@@ -1,15 +1,13 @@
 import 'dart:io';
 
-
 import 'dart:ffi' as ffi;
 import 'package:ffi/ffi.dart';
 
 import 'unqlite_bindings.dart';
 
+String _libPath = '';
 
-String _libPath= '';
-
-set libPath(String path) => _libPath=path;
+set libPath(String path) => _libPath = path;
 
 ffi.DynamicLibrary _load() {
   var path = _libPath.isNotEmpty ? _libPath : "libunqlite.so";
@@ -18,7 +16,7 @@ ffi.DynamicLibrary _load() {
     path = _libPath.isNotEmpty ? _libPath : "libunqlite.dll";
   } else if (Platform.isMacOS) {
     path = _libPath.isNotEmpty ? _libPath : "libunqlite.dylib";
-  }else if(Platform.isIOS){
+  } else if (Platform.isIOS) {
     return ffi.DynamicLibrary.process();
   }
 
@@ -36,18 +34,17 @@ typedef _WriteData = int Function(
   int,
 );
 
-class UnQLiteHelper {
+class UnQLite {
   final ffi.DynamicLibrary _dylib;
-  late UnQLite _unqlite;
+  late UnQLiteBindings _unqlite;
   late ffi.Pointer<unqlite> _pdb;
 
-  UnQLiteHelper(String dbName) : _dylib = _load() {
-    _unqlite = UnQLite(_dylib);
+  UnQLite(String dbName, [int flags = UNQLITE_OPEN_CREATE]) : _dylib = _load() {
+    _unqlite = UnQLiteBindings(_dylib);
     // ignore: omit_local_variable_types
     ffi.Pointer<ffi.Pointer<unqlite>> ppDB = calloc();
 
-    var r = _unqlite.unqlite_open(
-        ppDB, dbName.toNativeUtf8().cast(), UNQLITE_OPEN_CREATE);
+    var r = _unqlite.unqlite_open(ppDB, dbName.toNativeUtf8().cast(), flags);
 
     if (r != UNQLITE_OK) {
       throw Exception('Database open failed! The return value is $r');
@@ -55,14 +52,14 @@ class UnQLiteHelper {
     _pdb = ppDB.value;
   }
 
-  UnQLiteHelper.memory() : this(':mem:');
+  UnQLite.memory() : this(':mem:');
 
-  bool store(String k, String v) {
-    return _write(k, v, _unqlite.unqlite_kv_store);
+  bool store(String key, String value) {
+    return _write(key, value, _unqlite.unqlite_kv_store);
   }
 
-  bool append(String k, String v) {
-    return _write(k, v, _unqlite.unqlite_kv_append);
+  bool append(String key, String value) {
+    return _write(key, value, _unqlite.unqlite_kv_append);
   }
 
   bool delete(String k) {
@@ -85,17 +82,34 @@ class UnQLiteHelper {
     return r == UNQLITE_OK;
   }
 
-  void exec(String str){
-    ffi.Pointer<ffi.Pointer<unqlite_vm>> ppVM = calloc();
-    var rc = _unqlite.unqlite_compile(_pdb, str.toNativeUtf8().cast(), str.length, ppVM);
+  bool exists(String key) {
+    var k = key.toNativeUtf8();
+    // ignore: omit_local_variable_types
+    ffi.Pointer<ffi.Int64> pLen = calloc();
+    int r;
+    bool b = false;
+    r = _unqlite.unqlite_kv_fetch(_pdb, k.cast(), -1, ffi.nullptr, pLen);
+    if (r == UNQLITE_OK) {
+      b = true;
+    } else if (r == UNQLITE_NOTFOUND) {
+      b = false;
+    } else if (r == UNQLITE_IOERR) {
+      throw Exception("Data fetch failed!");
+    }
+    return b;
+  }
 
-    if(rc == UNQLITE_OK){
-      print('=====================');
+  void execute(String str) {
+    ffi.Pointer<ffi.Pointer<unqlite_vm>> ppVM = calloc();
+    var rc = _unqlite.unqlite_compile(
+        _pdb, str.toNativeUtf8().cast(), str.length, ppVM);
+
+    if (rc != UNQLITE_OK) {
+      throw Exception("execute failed!");
     }
 
     // _unqlite.unqlite_vm_exec(pVm)
   }
-
 
   bool _write(String k, String v, _WriteData fn) {
     var key = k.toNativeUtf8();
