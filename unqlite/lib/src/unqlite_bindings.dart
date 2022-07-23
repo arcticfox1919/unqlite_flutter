@@ -49,19 +49,23 @@ class UnQLiteBindings {
   int unqlite_config(
     ffi.Pointer<unqlite> pDb,
     int nOp,
+    ffi.Pointer<ffi.Pointer<ffi.Uint8>> ppBuf,
+    ffi.Pointer<ffi.Int32> size
   ) {
     return _unqlite_config(
       pDb,
       nOp,
+      ppBuf,
+      size
     );
   }
 
   late final _unqlite_configPtr = _lookup<
       ffi.NativeFunction<
           ffi.Int32 Function(
-              ffi.Pointer<unqlite>, ffi.Int32)>>('unqlite_config');
+              ffi.Pointer<unqlite>, ffi.Int32,ffi.Pointer<ffi.Pointer<ffi.Uint8>>,ffi.Pointer<ffi.Int32>)>>('unqlite_config');
   late final _unqlite_config =
-      _unqlite_configPtr.asFunction<int Function(ffi.Pointer<unqlite>, int)>();
+      _unqlite_configPtr.asFunction<int Function(ffi.Pointer<unqlite>, int, ffi.Pointer<ffi.Pointer<ffi.Uint8>>,ffi.Pointer<ffi.Int32>)>();
 
   int unqlite_close(
     ffi.Pointer<unqlite> pDb,

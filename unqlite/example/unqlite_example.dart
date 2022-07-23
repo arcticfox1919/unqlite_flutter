@@ -1,7 +1,7 @@
 import 'package:unqlite/unqlite.dart';
 
 void main() {
-  UnQLite unqlite = UnQLite("./test/test.db");
+  UnQLite unqlite = UnQLite.open("./test/test.db");
   unqlite.store("name", "Alex");
   unqlite.store("age", "18");
   print(unqlite.fetch("name"));

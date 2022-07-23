@@ -1,4 +1,4 @@
-package xyz.bczl.unqlite_flutter_example;
+package xyz.bczl.example;
 
 import io.flutter.embedding.android.FlutterActivity;
 
