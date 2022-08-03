@@ -1,6 +1,6 @@
 name: unqlite
 description: Dart language bindings for unqlite databases
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/arcticfox1919/unqlite_flutter
 
 environment:
@@ -8,12 +8,12 @@ environment:
 
 
 dependencies:
-  ffi: ^1.1.2
+  ffi: ^2.0.1
   buffer: ^1.1.1
 #   path: ^1.8.0
 
 dev_dependencies:
-  ffigen: ^4.1.2
+  ffigen: ^6.0.1
   lints: ^1.0.0
   test: ^1.16.0
 
@@ -77,6 +77,22 @@ ffigen:
       - unqlite_begin
       - unqlite_commit
       - unqlite_rollback
+
+      # On Demand Object Allocation Interfaces
+      - unqlite_vm_new_scalar
+      - unqlite_vm_new_array
+      - unqlite_vm_release_value
+      - unqlite_context_new_scalar
+      - unqlite_context_new_array
+      - unqlite_context_release_value
+
+      # Obtaining Object Values
+      - unqlite_value_to_int
+      - unqlite_value_to_bool
+      - unqlite_value_to_int64
+      - unqlite_value_to_double
+      - unqlite_value_to_string
+      - unqlite_value_to_resource
 
       # Dynamically Typed Value Object Management Interfaces
       - unqlite_value_int

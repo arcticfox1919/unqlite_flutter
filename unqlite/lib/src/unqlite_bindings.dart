@@ -28,7 +28,7 @@ class UnQLiteBindings {
 
   int unqlite_open(
     ffi.Pointer<ffi.Pointer<unqlite>> ppDB,
-    ffi.Pointer<ffi.Int8> zFilename,
+    ffi.Pointer<ffi.Char> zFilename,
     int iMode,
   ) {
     return _unqlite_open(
@@ -40,32 +40,25 @@ class UnQLiteBindings {
 
   late final _unqlite_openPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<ffi.Pointer<unqlite>>,
-              ffi.Pointer<ffi.Int8>, ffi.Uint32)>>('unqlite_open');
+          ffi.Int Function(ffi.Pointer<ffi.Pointer<unqlite>>,
+              ffi.Pointer<ffi.Char>, ffi.UnsignedInt)>>('unqlite_open');
   late final _unqlite_open = _unqlite_openPtr.asFunction<
       int Function(
-          ffi.Pointer<ffi.Pointer<unqlite>>, ffi.Pointer<ffi.Int8>, int)>();
+          ffi.Pointer<ffi.Pointer<unqlite>>, ffi.Pointer<ffi.Char>, int)>();
 
-  int unqlite_config(
-    ffi.Pointer<unqlite> pDb,
-    int nOp,
-    ffi.Pointer<ffi.Pointer<ffi.Uint8>> ppBuf,
-    ffi.Pointer<ffi.Int32> size
-  ) {
+  int unqlite_config(ffi.Pointer<unqlite> pDb, int nOp,
+      ffi.Pointer<ffi.Pointer<ffi.Uint8>> ppBuf, ffi.Pointer<ffi.Int32> size) {
     return _unqlite_config(
       pDb,
       nOp,
-      ppBuf,
-      size
     );
   }
 
   late final _unqlite_configPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<unqlite>, ffi.Int32,ffi.Pointer<ffi.Pointer<ffi.Uint8>>,ffi.Pointer<ffi.Int32>)>>('unqlite_config');
+          ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite>, ffi.Int)>>(
+      'unqlite_config');
   late final _unqlite_config =
-      _unqlite_configPtr.asFunction<int Function(ffi.Pointer<unqlite>, int, ffi.Pointer<ffi.Pointer<ffi.Uint8>>,ffi.Pointer<ffi.Int32>)>();
+      _unqlite_configPtr.asFunction<int Function(ffi.Pointer<unqlite>, int)>();
 
   int unqlite_close(
     ffi.Pointer<unqlite> pDb,
@@ -76,7 +69,7 @@ class UnQLiteBindings {
   }
 
   late final _unqlite_closePtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite>)>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite>)>>(
           'unqlite_close');
   late final _unqlite_close =
       _unqlite_closePtr.asFunction<int Function(ffi.Pointer<unqlite>)>();
@@ -99,12 +92,8 @@ class UnQLiteBindings {
 
   late final _unqlite_kv_storePtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<unqlite>,
-              ffi.Pointer<ffi.Void>,
-              ffi.Int32,
-              ffi.Pointer<ffi.Void>,
-              unqlite_int64)>>('unqlite_kv_store');
+          ffi.Int Function(ffi.Pointer<unqlite>, ffi.Pointer<ffi.Void>, ffi.Int,
+              ffi.Pointer<ffi.Void>, unqlite_int64)>>('unqlite_kv_store');
   late final _unqlite_kv_store = _unqlite_kv_storePtr.asFunction<
       int Function(ffi.Pointer<unqlite>, ffi.Pointer<ffi.Void>, int,
           ffi.Pointer<ffi.Void>, int)>();
@@ -127,12 +116,8 @@ class UnQLiteBindings {
 
   late final _unqlite_kv_appendPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<unqlite>,
-              ffi.Pointer<ffi.Void>,
-              ffi.Int32,
-              ffi.Pointer<ffi.Void>,
-              unqlite_int64)>>('unqlite_kv_append');
+          ffi.Int Function(ffi.Pointer<unqlite>, ffi.Pointer<ffi.Void>, ffi.Int,
+              ffi.Pointer<ffi.Void>, unqlite_int64)>>('unqlite_kv_append');
   late final _unqlite_kv_append = _unqlite_kv_appendPtr.asFunction<
       int Function(ffi.Pointer<unqlite>, ffi.Pointer<ffi.Void>, int,
           ffi.Pointer<ffi.Void>, int)>();
@@ -141,7 +126,7 @@ class UnQLiteBindings {
     ffi.Pointer<unqlite> pDb,
     ffi.Pointer<ffi.Void> pKey,
     int nKeyLen,
-    ffi.Pointer<ffi.Int8> zFormat,
+    ffi.Pointer<ffi.Char> zFormat,
   ) {
     return _unqlite_kv_store_fmt(
       pDb,
@@ -153,17 +138,17 @@ class UnQLiteBindings {
 
   late final _unqlite_kv_store_fmtPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite>, ffi.Pointer<ffi.Void>,
-              ffi.Int32, ffi.Pointer<ffi.Int8>)>>('unqlite_kv_store_fmt');
+          ffi.Int Function(ffi.Pointer<unqlite>, ffi.Pointer<ffi.Void>, ffi.Int,
+              ffi.Pointer<ffi.Char>)>>('unqlite_kv_store_fmt');
   late final _unqlite_kv_store_fmt = _unqlite_kv_store_fmtPtr.asFunction<
       int Function(ffi.Pointer<unqlite>, ffi.Pointer<ffi.Void>, int,
-          ffi.Pointer<ffi.Int8>)>();
+          ffi.Pointer<ffi.Char>)>();
 
   int unqlite_kv_append_fmt(
     ffi.Pointer<unqlite> pDb,
     ffi.Pointer<ffi.Void> pKey,
     int nKeyLen,
-    ffi.Pointer<ffi.Int8> zFormat,
+    ffi.Pointer<ffi.Char> zFormat,
   ) {
     return _unqlite_kv_append_fmt(
       pDb,
@@ -175,11 +160,11 @@ class UnQLiteBindings {
 
   late final _unqlite_kv_append_fmtPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite>, ffi.Pointer<ffi.Void>,
-              ffi.Int32, ffi.Pointer<ffi.Int8>)>>('unqlite_kv_append_fmt');
+          ffi.Int Function(ffi.Pointer<unqlite>, ffi.Pointer<ffi.Void>, ffi.Int,
+              ffi.Pointer<ffi.Char>)>>('unqlite_kv_append_fmt');
   late final _unqlite_kv_append_fmt = _unqlite_kv_append_fmtPtr.asFunction<
       int Function(ffi.Pointer<unqlite>, ffi.Pointer<ffi.Void>, int,
-          ffi.Pointer<ffi.Int8>)>();
+          ffi.Pointer<ffi.Char>)>();
 
   int unqlite_kv_fetch(
     ffi.Pointer<unqlite> pDb,
@@ -199,10 +184,10 @@ class UnQLiteBindings {
 
   late final _unqlite_kv_fetchPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<unqlite>,
               ffi.Pointer<ffi.Void>,
-              ffi.Int32,
+              ffi.Int,
               ffi.Pointer<ffi.Void>,
               ffi.Pointer<unqlite_int64>)>>('unqlite_kv_fetch');
   late final _unqlite_kv_fetch = _unqlite_kv_fetchPtr.asFunction<
@@ -215,8 +200,8 @@ class UnQLiteBindings {
     int nKeyLen,
     ffi.Pointer<
             ffi.NativeFunction<
-                ffi.Int32 Function(
-                    ffi.Pointer<ffi.Void>, ffi.Uint32, ffi.Pointer<ffi.Void>)>>
+                ffi.Int Function(ffi.Pointer<ffi.Void>, ffi.UnsignedInt,
+                    ffi.Pointer<ffi.Void>)>>
         xConsumer,
     ffi.Pointer<ffi.Void> pUserData,
   ) {
@@ -231,13 +216,13 @@ class UnQLiteBindings {
 
   late final _unqlite_kv_fetch_callbackPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<unqlite>,
               ffi.Pointer<ffi.Void>,
-              ffi.Int32,
+              ffi.Int,
               ffi.Pointer<
                   ffi.NativeFunction<
-                      ffi.Int32 Function(ffi.Pointer<ffi.Void>, ffi.Uint32,
+                      ffi.Int Function(ffi.Pointer<ffi.Void>, ffi.UnsignedInt,
                           ffi.Pointer<ffi.Void>)>>,
               ffi.Pointer<ffi.Void>)>>('unqlite_kv_fetch_callback');
   late final _unqlite_kv_fetch_callback =
@@ -248,7 +233,7 @@ class UnQLiteBindings {
               int,
               ffi.Pointer<
                   ffi.NativeFunction<
-                      ffi.Int32 Function(ffi.Pointer<ffi.Void>, ffi.Uint32,
+                      ffi.Int Function(ffi.Pointer<ffi.Void>, ffi.UnsignedInt,
                           ffi.Pointer<ffi.Void>)>>,
               ffi.Pointer<ffi.Void>)>();
 
@@ -266,8 +251,8 @@ class UnQLiteBindings {
 
   late final _unqlite_kv_deletePtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite>, ffi.Pointer<ffi.Void>,
-              ffi.Int32)>>('unqlite_kv_delete');
+          ffi.Int Function(ffi.Pointer<unqlite>, ffi.Pointer<ffi.Void>,
+              ffi.Int)>>('unqlite_kv_delete');
   late final _unqlite_kv_delete = _unqlite_kv_deletePtr.asFunction<
       int Function(ffi.Pointer<unqlite>, ffi.Pointer<ffi.Void>, int)>();
 
@@ -282,15 +267,14 @@ class UnQLiteBindings {
   }
 
   late final _unqlite_kv_configPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<unqlite>, ffi.Int32)>>('unqlite_kv_config');
+          ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite>, ffi.Int)>>(
+      'unqlite_kv_config');
   late final _unqlite_kv_config = _unqlite_kv_configPtr
       .asFunction<int Function(ffi.Pointer<unqlite>, int)>();
 
   int unqlite_compile(
     ffi.Pointer<unqlite> pDb,
-    ffi.Pointer<ffi.Int8> zJx9,
+    ffi.Pointer<ffi.Char> zJx9,
     int nByte,
     ffi.Pointer<ffi.Pointer<unqlite_vm>> ppOut,
   ) {
@@ -304,18 +288,15 @@ class UnQLiteBindings {
 
   late final _unqlite_compilePtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<unqlite>,
-              ffi.Pointer<ffi.Int8>,
-              ffi.Int32,
+          ffi.Int Function(ffi.Pointer<unqlite>, ffi.Pointer<ffi.Char>, ffi.Int,
               ffi.Pointer<ffi.Pointer<unqlite_vm>>)>>('unqlite_compile');
   late final _unqlite_compile = _unqlite_compilePtr.asFunction<
-      int Function(ffi.Pointer<unqlite>, ffi.Pointer<ffi.Int8>, int,
+      int Function(ffi.Pointer<unqlite>, ffi.Pointer<ffi.Char>, int,
           ffi.Pointer<ffi.Pointer<unqlite_vm>>)>();
 
   int unqlite_compile_file(
     ffi.Pointer<unqlite> pDb,
-    ffi.Pointer<ffi.Int8> zPath,
+    ffi.Pointer<ffi.Char> zPath,
     ffi.Pointer<ffi.Pointer<unqlite_vm>> ppOut,
   ) {
     return _unqlite_compile_file(
@@ -327,28 +308,32 @@ class UnQLiteBindings {
 
   late final _unqlite_compile_filePtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite>, ffi.Pointer<ffi.Int8>,
+          ffi.Int Function(ffi.Pointer<unqlite>, ffi.Pointer<ffi.Char>,
               ffi.Pointer<ffi.Pointer<unqlite_vm>>)>>('unqlite_compile_file');
   late final _unqlite_compile_file = _unqlite_compile_filePtr.asFunction<
-      int Function(ffi.Pointer<unqlite>, ffi.Pointer<ffi.Int8>,
+      int Function(ffi.Pointer<unqlite>, ffi.Pointer<ffi.Char>,
           ffi.Pointer<ffi.Pointer<unqlite_vm>>)>();
 
-  int unqlite_vm_config(
-    ffi.Pointer<unqlite_vm> pVm,
-    int iOp,
-  ) {
+  int unqlite_vm_config(ffi.Pointer<unqlite_vm> pVm, int iOp,
+      ffi.Pointer<ffi.Char> nP, ffi.Pointer<unqlite_value> vP) {
     return _unqlite_vm_config(
       pVm,
       iOp,
+      nP,
+      vP,
     );
   }
 
   late final _unqlite_vm_configPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<unqlite_vm>, ffi.Int32)>>('unqlite_vm_config');
-  late final _unqlite_vm_config = _unqlite_vm_configPtr
-      .asFunction<int Function(ffi.Pointer<unqlite_vm>, int)>();
+          ffi.Int Function(
+              ffi.Pointer<unqlite_vm>,
+              ffi.Int,
+              ffi.Pointer<ffi.Char>,
+              ffi.Pointer<unqlite_value>)>>('unqlite_vm_config');
+  late final _unqlite_vm_config = _unqlite_vm_configPtr.asFunction<
+      int Function(ffi.Pointer<unqlite_vm>, int, ffi.Pointer<ffi.Char>,
+          ffi.Pointer<unqlite_value>)>();
 
   int unqlite_vm_exec(
     ffi.Pointer<unqlite_vm> pVm,
@@ -359,7 +344,7 @@ class UnQLiteBindings {
   }
 
   late final _unqlite_vm_execPtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite_vm>)>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_vm>)>>(
           'unqlite_vm_exec');
   late final _unqlite_vm_exec =
       _unqlite_vm_execPtr.asFunction<int Function(ffi.Pointer<unqlite_vm>)>();
@@ -373,7 +358,7 @@ class UnQLiteBindings {
   }
 
   late final _unqlite_vm_resetPtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite_vm>)>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_vm>)>>(
           'unqlite_vm_reset');
   late final _unqlite_vm_reset =
       _unqlite_vm_resetPtr.asFunction<int Function(ffi.Pointer<unqlite_vm>)>();
@@ -387,7 +372,7 @@ class UnQLiteBindings {
   }
 
   late final _unqlite_vm_releasePtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite_vm>)>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_vm>)>>(
           'unqlite_vm_release');
   late final _unqlite_vm_release = _unqlite_vm_releasePtr
       .asFunction<int Function(ffi.Pointer<unqlite_vm>)>();
@@ -396,8 +381,8 @@ class UnQLiteBindings {
     ffi.Pointer<unqlite_vm> pVm,
     ffi.Pointer<
             ffi.NativeFunction<
-                ffi.Int32 Function(
-                    ffi.Pointer<ffi.Void>, ffi.Uint32, ffi.Pointer<ffi.Void>)>>
+                ffi.Int Function(ffi.Pointer<ffi.Void>, ffi.UnsignedInt,
+                    ffi.Pointer<ffi.Void>)>>
         xConsumer,
     ffi.Pointer<ffi.Void> pUserData,
   ) {
@@ -410,11 +395,11 @@ class UnQLiteBindings {
 
   late final _unqlite_vm_dumpPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<unqlite_vm>,
               ffi.Pointer<
                   ffi.NativeFunction<
-                      ffi.Int32 Function(ffi.Pointer<ffi.Void>, ffi.Uint32,
+                      ffi.Int Function(ffi.Pointer<ffi.Void>, ffi.UnsignedInt,
                           ffi.Pointer<ffi.Void>)>>,
               ffi.Pointer<ffi.Void>)>>('unqlite_vm_dump');
   late final _unqlite_vm_dump = _unqlite_vm_dumpPtr.asFunction<
@@ -422,13 +407,13 @@ class UnQLiteBindings {
           ffi.Pointer<unqlite_vm>,
           ffi.Pointer<
               ffi.NativeFunction<
-                  ffi.Int32 Function(ffi.Pointer<ffi.Void>, ffi.Uint32,
+                  ffi.Int Function(ffi.Pointer<ffi.Void>, ffi.UnsignedInt,
                       ffi.Pointer<ffi.Void>)>>,
           ffi.Pointer<ffi.Void>)>();
 
   ffi.Pointer<unqlite_value> unqlite_vm_extract_variable(
     ffi.Pointer<unqlite_vm> pVm,
-    ffi.Pointer<ffi.Int8> zVarname,
+    ffi.Pointer<ffi.Char> zVarname,
   ) {
     return _unqlite_vm_extract_variable(
       pVm,
@@ -439,11 +424,11 @@ class UnQLiteBindings {
   late final _unqlite_vm_extract_variablePtr = _lookup<
       ffi.NativeFunction<
           ffi.Pointer<unqlite_value> Function(ffi.Pointer<unqlite_vm>,
-              ffi.Pointer<ffi.Int8>)>>('unqlite_vm_extract_variable');
+              ffi.Pointer<ffi.Char>)>>('unqlite_vm_extract_variable');
   late final _unqlite_vm_extract_variable =
       _unqlite_vm_extract_variablePtr.asFunction<
           ffi.Pointer<unqlite_value> Function(
-              ffi.Pointer<unqlite_vm>, ffi.Pointer<ffi.Int8>)>();
+              ffi.Pointer<unqlite_vm>, ffi.Pointer<ffi.Char>)>();
 
   int unqlite_kv_cursor_init(
     ffi.Pointer<unqlite> pDb,
@@ -457,7 +442,7 @@ class UnQLiteBindings {
 
   late final _unqlite_kv_cursor_initPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Int32 Function(ffi.Pointer<unqlite>,
+              ffi.Int Function(ffi.Pointer<unqlite>,
                   ffi.Pointer<ffi.Pointer<unqlite_kv_cursor>>)>>(
       'unqlite_kv_cursor_init');
   late final _unqlite_kv_cursor_init = _unqlite_kv_cursor_initPtr.asFunction<
@@ -476,7 +461,7 @@ class UnQLiteBindings {
 
   late final _unqlite_kv_cursor_releasePtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite>,
+          ffi.Int Function(ffi.Pointer<unqlite>,
               ffi.Pointer<unqlite_kv_cursor>)>>('unqlite_kv_cursor_release');
   late final _unqlite_kv_cursor_release =
       _unqlite_kv_cursor_releasePtr.asFunction<
@@ -498,11 +483,11 @@ class UnQLiteBindings {
 
   late final _unqlite_kv_cursor_seekPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<unqlite_kv_cursor>,
               ffi.Pointer<ffi.Void>,
-              ffi.Int32,
-              ffi.Int32)>>('unqlite_kv_cursor_seek');
+              ffi.Int,
+              ffi.Int)>>('unqlite_kv_cursor_seek');
   late final _unqlite_kv_cursor_seek = _unqlite_kv_cursor_seekPtr.asFunction<
       int Function(
           ffi.Pointer<unqlite_kv_cursor>, ffi.Pointer<ffi.Void>, int, int)>();
@@ -516,8 +501,7 @@ class UnQLiteBindings {
   }
 
   late final _unqlite_kv_cursor_first_entryPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Int32 Function(ffi.Pointer<unqlite_kv_cursor>)>>(
+          ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_kv_cursor>)>>(
       'unqlite_kv_cursor_first_entry');
   late final _unqlite_kv_cursor_first_entry = _unqlite_kv_cursor_first_entryPtr
       .asFunction<int Function(ffi.Pointer<unqlite_kv_cursor>)>();
@@ -531,9 +515,8 @@ class UnQLiteBindings {
   }
 
   late final _unqlite_kv_cursor_last_entryPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<unqlite_kv_cursor>)>>('unqlite_kv_cursor_last_entry');
+          ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_kv_cursor>)>>(
+      'unqlite_kv_cursor_last_entry');
   late final _unqlite_kv_cursor_last_entry = _unqlite_kv_cursor_last_entryPtr
       .asFunction<int Function(ffi.Pointer<unqlite_kv_cursor>)>();
 
@@ -546,8 +529,7 @@ class UnQLiteBindings {
   }
 
   late final _unqlite_kv_cursor_valid_entryPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Int32 Function(ffi.Pointer<unqlite_kv_cursor>)>>(
+          ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_kv_cursor>)>>(
       'unqlite_kv_cursor_valid_entry');
   late final _unqlite_kv_cursor_valid_entry = _unqlite_kv_cursor_valid_entryPtr
       .asFunction<int Function(ffi.Pointer<unqlite_kv_cursor>)>();
@@ -561,9 +543,8 @@ class UnQLiteBindings {
   }
 
   late final _unqlite_kv_cursor_next_entryPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<unqlite_kv_cursor>)>>('unqlite_kv_cursor_next_entry');
+          ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_kv_cursor>)>>(
+      'unqlite_kv_cursor_next_entry');
   late final _unqlite_kv_cursor_next_entry = _unqlite_kv_cursor_next_entryPtr
       .asFunction<int Function(ffi.Pointer<unqlite_kv_cursor>)>();
 
@@ -576,16 +557,15 @@ class UnQLiteBindings {
   }
 
   late final _unqlite_kv_cursor_prev_entryPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<unqlite_kv_cursor>)>>('unqlite_kv_cursor_prev_entry');
+          ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_kv_cursor>)>>(
+      'unqlite_kv_cursor_prev_entry');
   late final _unqlite_kv_cursor_prev_entry = _unqlite_kv_cursor_prev_entryPtr
       .asFunction<int Function(ffi.Pointer<unqlite_kv_cursor>)>();
 
   int unqlite_kv_cursor_key(
     ffi.Pointer<unqlite_kv_cursor> pCursor,
     ffi.Pointer<ffi.Void> pBuf,
-    ffi.Pointer<ffi.Int32> pnByte,
+    ffi.Pointer<ffi.Int> pnByte,
   ) {
     return _unqlite_kv_cursor_key(
       pCursor,
@@ -596,20 +576,20 @@ class UnQLiteBindings {
 
   late final _unqlite_kv_cursor_keyPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<unqlite_kv_cursor>,
               ffi.Pointer<ffi.Void>,
-              ffi.Pointer<ffi.Int32>)>>('unqlite_kv_cursor_key');
+              ffi.Pointer<ffi.Int>)>>('unqlite_kv_cursor_key');
   late final _unqlite_kv_cursor_key = _unqlite_kv_cursor_keyPtr.asFunction<
       int Function(ffi.Pointer<unqlite_kv_cursor>, ffi.Pointer<ffi.Void>,
-          ffi.Pointer<ffi.Int32>)>();
+          ffi.Pointer<ffi.Int>)>();
 
   int unqlite_kv_cursor_key_callback(
     ffi.Pointer<unqlite_kv_cursor> pCursor,
     ffi.Pointer<
             ffi.NativeFunction<
-                ffi.Int32 Function(
-                    ffi.Pointer<ffi.Void>, ffi.Uint32, ffi.Pointer<ffi.Void>)>>
+                ffi.Int Function(ffi.Pointer<ffi.Void>, ffi.UnsignedInt,
+                    ffi.Pointer<ffi.Void>)>>
         xConsumer,
     ffi.Pointer<ffi.Void> pUserData,
   ) {
@@ -622,11 +602,11 @@ class UnQLiteBindings {
 
   late final _unqlite_kv_cursor_key_callbackPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<unqlite_kv_cursor>,
               ffi.Pointer<
                   ffi.NativeFunction<
-                      ffi.Int32 Function(ffi.Pointer<ffi.Void>, ffi.Uint32,
+                      ffi.Int Function(ffi.Pointer<ffi.Void>, ffi.UnsignedInt,
                           ffi.Pointer<ffi.Void>)>>,
               ffi.Pointer<ffi.Void>)>>('unqlite_kv_cursor_key_callback');
   late final _unqlite_kv_cursor_key_callback =
@@ -635,7 +615,7 @@ class UnQLiteBindings {
               ffi.Pointer<unqlite_kv_cursor>,
               ffi.Pointer<
                   ffi.NativeFunction<
-                      ffi.Int32 Function(ffi.Pointer<ffi.Void>, ffi.Uint32,
+                      ffi.Int Function(ffi.Pointer<ffi.Void>, ffi.UnsignedInt,
                           ffi.Pointer<ffi.Void>)>>,
               ffi.Pointer<ffi.Void>)>();
 
@@ -653,7 +633,7 @@ class UnQLiteBindings {
 
   late final _unqlite_kv_cursor_dataPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<unqlite_kv_cursor>,
               ffi.Pointer<ffi.Void>,
               ffi.Pointer<unqlite_int64>)>>('unqlite_kv_cursor_data');
@@ -665,8 +645,8 @@ class UnQLiteBindings {
     ffi.Pointer<unqlite_kv_cursor> pCursor,
     ffi.Pointer<
             ffi.NativeFunction<
-                ffi.Int32 Function(
-                    ffi.Pointer<ffi.Void>, ffi.Uint32, ffi.Pointer<ffi.Void>)>>
+                ffi.Int Function(ffi.Pointer<ffi.Void>, ffi.UnsignedInt,
+                    ffi.Pointer<ffi.Void>)>>
         xConsumer,
     ffi.Pointer<ffi.Void> pUserData,
   ) {
@@ -679,11 +659,11 @@ class UnQLiteBindings {
 
   late final _unqlite_kv_cursor_data_callbackPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<unqlite_kv_cursor>,
               ffi.Pointer<
                   ffi.NativeFunction<
-                      ffi.Int32 Function(ffi.Pointer<ffi.Void>, ffi.Uint32,
+                      ffi.Int Function(ffi.Pointer<ffi.Void>, ffi.UnsignedInt,
                           ffi.Pointer<ffi.Void>)>>,
               ffi.Pointer<ffi.Void>)>>('unqlite_kv_cursor_data_callback');
   late final _unqlite_kv_cursor_data_callback =
@@ -692,7 +672,7 @@ class UnQLiteBindings {
               ffi.Pointer<unqlite_kv_cursor>,
               ffi.Pointer<
                   ffi.NativeFunction<
-                      ffi.Int32 Function(ffi.Pointer<ffi.Void>, ffi.Uint32,
+                      ffi.Int Function(ffi.Pointer<ffi.Void>, ffi.UnsignedInt,
                           ffi.Pointer<ffi.Void>)>>,
               ffi.Pointer<ffi.Void>)>();
 
@@ -705,8 +685,7 @@ class UnQLiteBindings {
   }
 
   late final _unqlite_kv_cursor_delete_entryPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Int32 Function(ffi.Pointer<unqlite_kv_cursor>)>>(
+          ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_kv_cursor>)>>(
       'unqlite_kv_cursor_delete_entry');
   late final _unqlite_kv_cursor_delete_entry =
       _unqlite_kv_cursor_delete_entryPtr
@@ -721,9 +700,8 @@ class UnQLiteBindings {
   }
 
   late final _unqlite_kv_cursor_resetPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<unqlite_kv_cursor>)>>('unqlite_kv_cursor_reset');
+          ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_kv_cursor>)>>(
+      'unqlite_kv_cursor_reset');
   late final _unqlite_kv_cursor_reset = _unqlite_kv_cursor_resetPtr
       .asFunction<int Function(ffi.Pointer<unqlite_kv_cursor>)>();
 
@@ -736,7 +714,7 @@ class UnQLiteBindings {
   }
 
   late final _unqlite_beginPtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite>)>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite>)>>(
           'unqlite_begin');
   late final _unqlite_begin =
       _unqlite_beginPtr.asFunction<int Function(ffi.Pointer<unqlite>)>();
@@ -750,7 +728,7 @@ class UnQLiteBindings {
   }
 
   late final _unqlite_commitPtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite>)>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite>)>>(
           'unqlite_commit');
   late final _unqlite_commit =
       _unqlite_commitPtr.asFunction<int Function(ffi.Pointer<unqlite>)>();
@@ -764,10 +742,109 @@ class UnQLiteBindings {
   }
 
   late final _unqlite_rollbackPtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite>)>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite>)>>(
           'unqlite_rollback');
   late final _unqlite_rollback =
       _unqlite_rollbackPtr.asFunction<int Function(ffi.Pointer<unqlite>)>();
+
+  ffi.Pointer<unqlite_value> unqlite_vm_new_scalar(
+    ffi.Pointer<unqlite_vm> pVm,
+  ) {
+    return _unqlite_vm_new_scalar(
+      pVm,
+    );
+  }
+
+  late final _unqlite_vm_new_scalarPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<unqlite_value> Function(
+              ffi.Pointer<unqlite_vm>)>>('unqlite_vm_new_scalar');
+  late final _unqlite_vm_new_scalar = _unqlite_vm_new_scalarPtr.asFunction<
+      ffi.Pointer<unqlite_value> Function(ffi.Pointer<unqlite_vm>)>();
+
+  ffi.Pointer<unqlite_value> unqlite_vm_new_array(
+    ffi.Pointer<unqlite_vm> pVm,
+  ) {
+    return _unqlite_vm_new_array(
+      pVm,
+    );
+  }
+
+  late final _unqlite_vm_new_arrayPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<unqlite_value> Function(
+              ffi.Pointer<unqlite_vm>)>>('unqlite_vm_new_array');
+  late final _unqlite_vm_new_array = _unqlite_vm_new_arrayPtr.asFunction<
+      ffi.Pointer<unqlite_value> Function(ffi.Pointer<unqlite_vm>)>();
+
+  int unqlite_vm_release_value(
+    ffi.Pointer<unqlite_vm> pVm,
+    ffi.Pointer<unqlite_value> pValue,
+  ) {
+    return _unqlite_vm_release_value(
+      pVm,
+      pValue,
+    );
+  }
+
+  late final _unqlite_vm_release_valuePtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(ffi.Pointer<unqlite_vm>,
+              ffi.Pointer<unqlite_value>)>>('unqlite_vm_release_value');
+  late final _unqlite_vm_release_value =
+      _unqlite_vm_release_valuePtr.asFunction<
+          int Function(ffi.Pointer<unqlite_vm>, ffi.Pointer<unqlite_value>)>();
+
+  ffi.Pointer<unqlite_value> unqlite_context_new_scalar(
+    ffi.Pointer<unqlite_context> pCtx,
+  ) {
+    return _unqlite_context_new_scalar(
+      pCtx,
+    );
+  }
+
+  late final _unqlite_context_new_scalarPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<unqlite_value> Function(
+              ffi.Pointer<unqlite_context>)>>('unqlite_context_new_scalar');
+  late final _unqlite_context_new_scalar =
+      _unqlite_context_new_scalarPtr.asFunction<
+          ffi.Pointer<unqlite_value> Function(ffi.Pointer<unqlite_context>)>();
+
+  ffi.Pointer<unqlite_value> unqlite_context_new_array(
+    ffi.Pointer<unqlite_context> pCtx,
+  ) {
+    return _unqlite_context_new_array(
+      pCtx,
+    );
+  }
+
+  late final _unqlite_context_new_arrayPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<unqlite_value> Function(
+              ffi.Pointer<unqlite_context>)>>('unqlite_context_new_array');
+  late final _unqlite_context_new_array =
+      _unqlite_context_new_arrayPtr.asFunction<
+          ffi.Pointer<unqlite_value> Function(ffi.Pointer<unqlite_context>)>();
+
+  void unqlite_context_release_value(
+    ffi.Pointer<unqlite_context> pCtx,
+    ffi.Pointer<unqlite_value> pValue,
+  ) {
+    return _unqlite_context_release_value(
+      pCtx,
+      pValue,
+    );
+  }
+
+  late final _unqlite_context_release_valuePtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(ffi.Pointer<unqlite_context>,
+              ffi.Pointer<unqlite_value>)>>('unqlite_context_release_value');
+  late final _unqlite_context_release_value =
+      _unqlite_context_release_valuePtr.asFunction<
+          void Function(
+              ffi.Pointer<unqlite_context>, ffi.Pointer<unqlite_value>)>();
 
   int unqlite_value_int(
     ffi.Pointer<unqlite_value> pVal,
@@ -781,8 +858,8 @@ class UnQLiteBindings {
 
   late final _unqlite_value_intPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<unqlite_value>, ffi.Int32)>>('unqlite_value_int');
+          ffi.Int Function(
+              ffi.Pointer<unqlite_value>, ffi.Int)>>('unqlite_value_int');
   late final _unqlite_value_int = _unqlite_value_intPtr
       .asFunction<int Function(ffi.Pointer<unqlite_value>, int)>();
 
@@ -798,7 +875,7 @@ class UnQLiteBindings {
 
   late final _unqlite_value_int64Ptr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite_value>,
+          ffi.Int Function(ffi.Pointer<unqlite_value>,
               unqlite_int64)>>('unqlite_value_int64');
   late final _unqlite_value_int64 = _unqlite_value_int64Ptr
       .asFunction<int Function(ffi.Pointer<unqlite_value>, int)>();
@@ -815,8 +892,8 @@ class UnQLiteBindings {
 
   late final _unqlite_value_boolPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<unqlite_value>, ffi.Int32)>>('unqlite_value_bool');
+          ffi.Int Function(
+              ffi.Pointer<unqlite_value>, ffi.Int)>>('unqlite_value_bool');
   late final _unqlite_value_bool = _unqlite_value_boolPtr
       .asFunction<int Function(ffi.Pointer<unqlite_value>, int)>();
 
@@ -828,9 +905,9 @@ class UnQLiteBindings {
     );
   }
 
-  late final _unqlite_value_nullPtr = _lookup<
-          ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite_value>)>>(
-      'unqlite_value_null');
+  late final _unqlite_value_nullPtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_value>)>>(
+          'unqlite_value_null');
   late final _unqlite_value_null = _unqlite_value_nullPtr
       .asFunction<int Function(ffi.Pointer<unqlite_value>)>();
 
@@ -846,14 +923,14 @@ class UnQLiteBindings {
 
   late final _unqlite_value_doublePtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<unqlite_value>, ffi.Double)>>('unqlite_value_double');
   late final _unqlite_value_double = _unqlite_value_doublePtr
       .asFunction<int Function(ffi.Pointer<unqlite_value>, double)>();
 
   int unqlite_value_string(
     ffi.Pointer<unqlite_value> pVal,
-    ffi.Pointer<ffi.Int8> zString,
+    ffi.Pointer<ffi.Char> zString,
     int nLen,
   ) {
     return _unqlite_value_string(
@@ -865,14 +942,14 @@ class UnQLiteBindings {
 
   late final _unqlite_value_stringPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite_value>, ffi.Pointer<ffi.Int8>,
-              ffi.Int32)>>('unqlite_value_string');
+          ffi.Int Function(ffi.Pointer<unqlite_value>, ffi.Pointer<ffi.Char>,
+              ffi.Int)>>('unqlite_value_string');
   late final _unqlite_value_string = _unqlite_value_stringPtr.asFunction<
-      int Function(ffi.Pointer<unqlite_value>, ffi.Pointer<ffi.Int8>, int)>();
+      int Function(ffi.Pointer<unqlite_value>, ffi.Pointer<ffi.Char>, int)>();
 
   int unqlite_value_string_format(
     ffi.Pointer<unqlite_value> pVal,
-    ffi.Pointer<ffi.Int8> zFormat,
+    ffi.Pointer<ffi.Char> zFormat,
   ) {
     return _unqlite_value_string_format(
       pVal,
@@ -882,11 +959,11 @@ class UnQLiteBindings {
 
   late final _unqlite_value_string_formatPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite_value>,
-              ffi.Pointer<ffi.Int8>)>>('unqlite_value_string_format');
+          ffi.Int Function(ffi.Pointer<unqlite_value>,
+              ffi.Pointer<ffi.Char>)>>('unqlite_value_string_format');
   late final _unqlite_value_string_format =
       _unqlite_value_string_formatPtr.asFunction<
-          int Function(ffi.Pointer<unqlite_value>, ffi.Pointer<ffi.Int8>)>();
+          int Function(ffi.Pointer<unqlite_value>, ffi.Pointer<ffi.Char>)>();
 
   int unqlite_value_reset_string_cursor(
     ffi.Pointer<unqlite_value> pVal,
@@ -896,9 +973,9 @@ class UnQLiteBindings {
     );
   }
 
-  late final _unqlite_value_reset_string_cursorPtr = _lookup<
-          ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite_value>)>>(
-      'unqlite_value_reset_string_cursor');
+  late final _unqlite_value_reset_string_cursorPtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_value>)>>(
+          'unqlite_value_reset_string_cursor');
   late final _unqlite_value_reset_string_cursor =
       _unqlite_value_reset_string_cursorPtr
           .asFunction<int Function(ffi.Pointer<unqlite_value>)>();
@@ -915,7 +992,7 @@ class UnQLiteBindings {
 
   late final _unqlite_value_resourcePtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite_value>,
+          ffi.Int Function(ffi.Pointer<unqlite_value>,
               ffi.Pointer<ffi.Void>)>>('unqlite_value_resource');
   late final _unqlite_value_resource = _unqlite_value_resourcePtr.asFunction<
       int Function(ffi.Pointer<unqlite_value>, ffi.Pointer<ffi.Void>)>();
@@ -928,11 +1005,101 @@ class UnQLiteBindings {
     );
   }
 
-  late final _unqlite_value_releasePtr = _lookup<
-          ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite_value>)>>(
-      'unqlite_value_release');
+  late final _unqlite_value_releasePtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_value>)>>(
+          'unqlite_value_release');
   late final _unqlite_value_release = _unqlite_value_releasePtr
       .asFunction<int Function(ffi.Pointer<unqlite_value>)>();
+
+  int unqlite_value_to_int(
+    ffi.Pointer<unqlite_value> pValue,
+  ) {
+    return _unqlite_value_to_int(
+      pValue,
+    );
+  }
+
+  late final _unqlite_value_to_intPtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_value>)>>(
+          'unqlite_value_to_int');
+  late final _unqlite_value_to_int = _unqlite_value_to_intPtr
+      .asFunction<int Function(ffi.Pointer<unqlite_value>)>();
+
+  int unqlite_value_to_bool(
+    ffi.Pointer<unqlite_value> pValue,
+  ) {
+    return _unqlite_value_to_bool(
+      pValue,
+    );
+  }
+
+  late final _unqlite_value_to_boolPtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_value>)>>(
+          'unqlite_value_to_bool');
+  late final _unqlite_value_to_bool = _unqlite_value_to_boolPtr
+      .asFunction<int Function(ffi.Pointer<unqlite_value>)>();
+
+  int unqlite_value_to_int64(
+    ffi.Pointer<unqlite_value> pValue,
+  ) {
+    return _unqlite_value_to_int64(
+      pValue,
+    );
+  }
+
+  late final _unqlite_value_to_int64Ptr = _lookup<
+      ffi.NativeFunction<
+          unqlite_int64 Function(
+              ffi.Pointer<unqlite_value>)>>('unqlite_value_to_int64');
+  late final _unqlite_value_to_int64 = _unqlite_value_to_int64Ptr
+      .asFunction<int Function(ffi.Pointer<unqlite_value>)>();
+
+  double unqlite_value_to_double(
+    ffi.Pointer<unqlite_value> pValue,
+  ) {
+    return _unqlite_value_to_double(
+      pValue,
+    );
+  }
+
+  late final _unqlite_value_to_doublePtr = _lookup<
+          ffi.NativeFunction<ffi.Double Function(ffi.Pointer<unqlite_value>)>>(
+      'unqlite_value_to_double');
+  late final _unqlite_value_to_double = _unqlite_value_to_doublePtr
+      .asFunction<double Function(ffi.Pointer<unqlite_value>)>();
+
+  ffi.Pointer<ffi.Char> unqlite_value_to_string(
+    ffi.Pointer<unqlite_value> pValue,
+    ffi.Pointer<ffi.Int> pLen,
+  ) {
+    return _unqlite_value_to_string(
+      pValue,
+      pLen,
+    );
+  }
+
+  late final _unqlite_value_to_stringPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(ffi.Pointer<unqlite_value>,
+              ffi.Pointer<ffi.Int>)>>('unqlite_value_to_string');
+  late final _unqlite_value_to_string = _unqlite_value_to_stringPtr.asFunction<
+      ffi.Pointer<ffi.Char> Function(
+          ffi.Pointer<unqlite_value>, ffi.Pointer<ffi.Int>)>();
+
+  ffi.Pointer<ffi.Void> unqlite_value_to_resource(
+    ffi.Pointer<unqlite_value> pValue,
+  ) {
+    return _unqlite_value_to_resource(
+      pValue,
+    );
+  }
+
+  late final _unqlite_value_to_resourcePtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Void> Function(
+              ffi.Pointer<unqlite_value>)>>('unqlite_value_to_resource');
+  late final _unqlite_value_to_resource = _unqlite_value_to_resourcePtr
+      .asFunction<ffi.Pointer<ffi.Void> Function(ffi.Pointer<unqlite_value>)>();
 
   int unqlite_value_is_int(
     ffi.Pointer<unqlite_value> pVal,
@@ -942,9 +1109,9 @@ class UnQLiteBindings {
     );
   }
 
-  late final _unqlite_value_is_intPtr = _lookup<
-          ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite_value>)>>(
-      'unqlite_value_is_int');
+  late final _unqlite_value_is_intPtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_value>)>>(
+          'unqlite_value_is_int');
   late final _unqlite_value_is_int = _unqlite_value_is_intPtr
       .asFunction<int Function(ffi.Pointer<unqlite_value>)>();
 
@@ -956,9 +1123,9 @@ class UnQLiteBindings {
     );
   }
 
-  late final _unqlite_value_is_floatPtr = _lookup<
-          ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite_value>)>>(
-      'unqlite_value_is_float');
+  late final _unqlite_value_is_floatPtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_value>)>>(
+          'unqlite_value_is_float');
   late final _unqlite_value_is_float = _unqlite_value_is_floatPtr
       .asFunction<int Function(ffi.Pointer<unqlite_value>)>();
 
@@ -970,9 +1137,9 @@ class UnQLiteBindings {
     );
   }
 
-  late final _unqlite_value_is_boolPtr = _lookup<
-          ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite_value>)>>(
-      'unqlite_value_is_bool');
+  late final _unqlite_value_is_boolPtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_value>)>>(
+          'unqlite_value_is_bool');
   late final _unqlite_value_is_bool = _unqlite_value_is_boolPtr
       .asFunction<int Function(ffi.Pointer<unqlite_value>)>();
 
@@ -984,9 +1151,9 @@ class UnQLiteBindings {
     );
   }
 
-  late final _unqlite_value_is_stringPtr = _lookup<
-          ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite_value>)>>(
-      'unqlite_value_is_string');
+  late final _unqlite_value_is_stringPtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_value>)>>(
+          'unqlite_value_is_string');
   late final _unqlite_value_is_string = _unqlite_value_is_stringPtr
       .asFunction<int Function(ffi.Pointer<unqlite_value>)>();
 
@@ -998,9 +1165,9 @@ class UnQLiteBindings {
     );
   }
 
-  late final _unqlite_value_is_nullPtr = _lookup<
-          ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite_value>)>>(
-      'unqlite_value_is_null');
+  late final _unqlite_value_is_nullPtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_value>)>>(
+          'unqlite_value_is_null');
   late final _unqlite_value_is_null = _unqlite_value_is_nullPtr
       .asFunction<int Function(ffi.Pointer<unqlite_value>)>();
 
@@ -1012,9 +1179,9 @@ class UnQLiteBindings {
     );
   }
 
-  late final _unqlite_value_is_numericPtr = _lookup<
-          ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite_value>)>>(
-      'unqlite_value_is_numeric');
+  late final _unqlite_value_is_numericPtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_value>)>>(
+          'unqlite_value_is_numeric');
   late final _unqlite_value_is_numeric = _unqlite_value_is_numericPtr
       .asFunction<int Function(ffi.Pointer<unqlite_value>)>();
 
@@ -1026,9 +1193,9 @@ class UnQLiteBindings {
     );
   }
 
-  late final _unqlite_value_is_callablePtr = _lookup<
-          ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite_value>)>>(
-      'unqlite_value_is_callable');
+  late final _unqlite_value_is_callablePtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_value>)>>(
+          'unqlite_value_is_callable');
   late final _unqlite_value_is_callable = _unqlite_value_is_callablePtr
       .asFunction<int Function(ffi.Pointer<unqlite_value>)>();
 
@@ -1040,9 +1207,9 @@ class UnQLiteBindings {
     );
   }
 
-  late final _unqlite_value_is_scalarPtr = _lookup<
-          ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite_value>)>>(
-      'unqlite_value_is_scalar');
+  late final _unqlite_value_is_scalarPtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_value>)>>(
+          'unqlite_value_is_scalar');
   late final _unqlite_value_is_scalar = _unqlite_value_is_scalarPtr
       .asFunction<int Function(ffi.Pointer<unqlite_value>)>();
 
@@ -1054,9 +1221,9 @@ class UnQLiteBindings {
     );
   }
 
-  late final _unqlite_value_is_json_arrayPtr = _lookup<
-          ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite_value>)>>(
-      'unqlite_value_is_json_array');
+  late final _unqlite_value_is_json_arrayPtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_value>)>>(
+          'unqlite_value_is_json_array');
   late final _unqlite_value_is_json_array = _unqlite_value_is_json_arrayPtr
       .asFunction<int Function(ffi.Pointer<unqlite_value>)>();
 
@@ -1068,9 +1235,9 @@ class UnQLiteBindings {
     );
   }
 
-  late final _unqlite_value_is_json_objectPtr = _lookup<
-          ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite_value>)>>(
-      'unqlite_value_is_json_object');
+  late final _unqlite_value_is_json_objectPtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_value>)>>(
+          'unqlite_value_is_json_object');
   late final _unqlite_value_is_json_object = _unqlite_value_is_json_objectPtr
       .asFunction<int Function(ffi.Pointer<unqlite_value>)>();
 
@@ -1082,9 +1249,9 @@ class UnQLiteBindings {
     );
   }
 
-  late final _unqlite_value_is_resourcePtr = _lookup<
-          ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite_value>)>>(
-      'unqlite_value_is_resource');
+  late final _unqlite_value_is_resourcePtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_value>)>>(
+          'unqlite_value_is_resource');
   late final _unqlite_value_is_resource = _unqlite_value_is_resourcePtr
       .asFunction<int Function(ffi.Pointer<unqlite_value>)>();
 
@@ -1096,15 +1263,15 @@ class UnQLiteBindings {
     );
   }
 
-  late final _unqlite_value_is_emptyPtr = _lookup<
-          ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite_value>)>>(
-      'unqlite_value_is_empty');
+  late final _unqlite_value_is_emptyPtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_value>)>>(
+          'unqlite_value_is_empty');
   late final _unqlite_value_is_empty = _unqlite_value_is_emptyPtr
       .asFunction<int Function(ffi.Pointer<unqlite_value>)>();
 
   ffi.Pointer<unqlite_value> unqlite_array_fetch(
     ffi.Pointer<unqlite_value> pArray,
-    ffi.Pointer<ffi.Int8> zKey,
+    ffi.Pointer<ffi.Char> zKey,
     int nByte,
   ) {
     return _unqlite_array_fetch(
@@ -1117,16 +1284,16 @@ class UnQLiteBindings {
   late final _unqlite_array_fetchPtr = _lookup<
       ffi.NativeFunction<
           ffi.Pointer<unqlite_value> Function(ffi.Pointer<unqlite_value>,
-              ffi.Pointer<ffi.Int8>, ffi.Int32)>>('unqlite_array_fetch');
+              ffi.Pointer<ffi.Char>, ffi.Int)>>('unqlite_array_fetch');
   late final _unqlite_array_fetch = _unqlite_array_fetchPtr.asFunction<
       ffi.Pointer<unqlite_value> Function(
-          ffi.Pointer<unqlite_value>, ffi.Pointer<ffi.Int8>, int)>();
+          ffi.Pointer<unqlite_value>, ffi.Pointer<ffi.Char>, int)>();
 
   int unqlite_array_walk(
     ffi.Pointer<unqlite_value> pArray,
     ffi.Pointer<
             ffi.NativeFunction<
-                ffi.Int32 Function(ffi.Pointer<unqlite_value>,
+                ffi.Int Function(ffi.Pointer<unqlite_value>,
                     ffi.Pointer<unqlite_value>, ffi.Pointer<ffi.Void>)>>
         xWalk,
     ffi.Pointer<ffi.Void> pUserData,
@@ -1140,11 +1307,11 @@ class UnQLiteBindings {
 
   late final _unqlite_array_walkPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<unqlite_value>,
               ffi.Pointer<
                   ffi.NativeFunction<
-                      ffi.Int32 Function(ffi.Pointer<unqlite_value>,
+                      ffi.Int Function(ffi.Pointer<unqlite_value>,
                           ffi.Pointer<unqlite_value>, ffi.Pointer<ffi.Void>)>>,
               ffi.Pointer<ffi.Void>)>>('unqlite_array_walk');
   late final _unqlite_array_walk = _unqlite_array_walkPtr.asFunction<
@@ -1152,7 +1319,7 @@ class UnQLiteBindings {
           ffi.Pointer<unqlite_value>,
           ffi.Pointer<
               ffi.NativeFunction<
-                  ffi.Int32 Function(ffi.Pointer<unqlite_value>,
+                  ffi.Int Function(ffi.Pointer<unqlite_value>,
                       ffi.Pointer<unqlite_value>, ffi.Pointer<ffi.Void>)>>,
           ffi.Pointer<ffi.Void>)>();
 
@@ -1170,7 +1337,7 @@ class UnQLiteBindings {
 
   late final _unqlite_array_add_elemPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<unqlite_value>,
               ffi.Pointer<unqlite_value>,
               ffi.Pointer<unqlite_value>)>>('unqlite_array_add_elem');
@@ -1180,7 +1347,7 @@ class UnQLiteBindings {
 
   int unqlite_array_add_strkey_elem(
     ffi.Pointer<unqlite_value> pArray,
-    ffi.Pointer<ffi.Int8> zKey,
+    ffi.Pointer<ffi.Char> zKey,
     ffi.Pointer<unqlite_value> pValue,
   ) {
     return _unqlite_array_add_strkey_elem(
@@ -1192,11 +1359,11 @@ class UnQLiteBindings {
 
   late final _unqlite_array_add_strkey_elemPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite_value>, ffi.Pointer<ffi.Int8>,
+          ffi.Int Function(ffi.Pointer<unqlite_value>, ffi.Pointer<ffi.Char>,
               ffi.Pointer<unqlite_value>)>>('unqlite_array_add_strkey_elem');
   late final _unqlite_array_add_strkey_elem =
       _unqlite_array_add_strkey_elemPtr.asFunction<
-          int Function(ffi.Pointer<unqlite_value>, ffi.Pointer<ffi.Int8>,
+          int Function(ffi.Pointer<unqlite_value>, ffi.Pointer<ffi.Char>,
               ffi.Pointer<unqlite_value>)>();
 
   int unqlite_array_count(
@@ -1207,9 +1374,9 @@ class UnQLiteBindings {
     );
   }
 
-  late final _unqlite_array_countPtr = _lookup<
-          ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite_value>)>>(
-      'unqlite_array_count');
+  late final _unqlite_array_countPtr =
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_value>)>>(
+          'unqlite_array_count');
   late final _unqlite_array_count = _unqlite_array_countPtr
       .asFunction<int Function(ffi.Pointer<unqlite_value>)>();
 
@@ -1222,7 +1389,7 @@ class UnQLiteBindings {
   }
 
   late final _unqlite_lib_configPtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function(ffi.Int32)>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Int)>>(
           'unqlite_lib_config');
   late final _unqlite_lib_config =
       _unqlite_lib_configPtr.asFunction<int Function(int)>();
@@ -1232,7 +1399,7 @@ class UnQLiteBindings {
   }
 
   late final _unqlite_lib_initPtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function()>>('unqlite_lib_init');
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>('unqlite_lib_init');
   late final _unqlite_lib_init =
       _unqlite_lib_initPtr.asFunction<int Function()>();
 
@@ -1241,7 +1408,7 @@ class UnQLiteBindings {
   }
 
   late final _unqlite_lib_shutdownPtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function()>>('unqlite_lib_shutdown');
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>('unqlite_lib_shutdown');
   late final _unqlite_lib_shutdown =
       _unqlite_lib_shutdownPtr.asFunction<int Function()>();
 
@@ -1250,102 +1417,102 @@ class UnQLiteBindings {
   }
 
   late final _unqlite_lib_is_threadsafePtr =
-      _lookup<ffi.NativeFunction<ffi.Int32 Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Int Function()>>(
           'unqlite_lib_is_threadsafe');
   late final _unqlite_lib_is_threadsafe =
       _unqlite_lib_is_threadsafePtr.asFunction<int Function()>();
 
-  ffi.Pointer<ffi.Int8> unqlite_lib_version() {
+  ffi.Pointer<ffi.Char> unqlite_lib_version() {
     return _unqlite_lib_version();
   }
 
   late final _unqlite_lib_versionPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Int8> Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
           'unqlite_lib_version');
   late final _unqlite_lib_version =
-      _unqlite_lib_versionPtr.asFunction<ffi.Pointer<ffi.Int8> Function()>();
+      _unqlite_lib_versionPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
-  ffi.Pointer<ffi.Int8> unqlite_lib_signature() {
+  ffi.Pointer<ffi.Char> unqlite_lib_signature() {
     return _unqlite_lib_signature();
   }
 
   late final _unqlite_lib_signaturePtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Int8> Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
           'unqlite_lib_signature');
   late final _unqlite_lib_signature =
-      _unqlite_lib_signaturePtr.asFunction<ffi.Pointer<ffi.Int8> Function()>();
+      _unqlite_lib_signaturePtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
-  ffi.Pointer<ffi.Int8> unqlite_lib_ident() {
+  ffi.Pointer<ffi.Char> unqlite_lib_ident() {
     return _unqlite_lib_ident();
   }
 
   late final _unqlite_lib_identPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Int8> Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
           'unqlite_lib_ident');
   late final _unqlite_lib_ident =
-      _unqlite_lib_identPtr.asFunction<ffi.Pointer<ffi.Int8> Function()>();
+      _unqlite_lib_identPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
-  ffi.Pointer<ffi.Int8> unqlite_lib_copyright() {
+  ffi.Pointer<ffi.Char> unqlite_lib_copyright() {
     return _unqlite_lib_copyright();
   }
 
   late final _unqlite_lib_copyrightPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Int8> Function()>>(
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
           'unqlite_lib_copyright');
   late final _unqlite_lib_copyright =
-      _unqlite_lib_copyrightPtr.asFunction<ffi.Pointer<ffi.Int8> Function()>();
+      _unqlite_lib_copyrightPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 }
 
-typedef uintptr_t = ffi.Uint64;
+typedef uintptr_t = ffi.UnsignedLongLong;
 
 class unqlite_io_methods extends ffi.Struct {
-  @ffi.Int32()
+  @ffi.Int()
   external int iVersion;
 
   external ffi.Pointer<
-      ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite_file>)>> xClose;
+      ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_file>)>> xClose;
 
   external ffi.Pointer<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite_file>, ffi.Pointer<ffi.Void>,
+          ffi.Int Function(ffi.Pointer<unqlite_file>, ffi.Pointer<ffi.Void>,
               unqlite_int64, unqlite_int64)>> xRead;
 
   external ffi.Pointer<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite_file>, ffi.Pointer<ffi.Void>,
+          ffi.Int Function(ffi.Pointer<unqlite_file>, ffi.Pointer<ffi.Void>,
               unqlite_int64, unqlite_int64)>> xWrite;
 
   external ffi.Pointer<
           ffi.NativeFunction<
-              ffi.Int32 Function(ffi.Pointer<unqlite_file>, unqlite_int64)>>
+              ffi.Int Function(ffi.Pointer<unqlite_file>, unqlite_int64)>>
       xTruncate;
 
   external ffi.Pointer<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite_file>, ffi.Int32)>> xSync;
+          ffi.Int Function(ffi.Pointer<unqlite_file>, ffi.Int)>> xSync;
 
   external ffi.Pointer<
           ffi.NativeFunction<
-              ffi.Int32 Function(
+              ffi.Int Function(
                   ffi.Pointer<unqlite_file>, ffi.Pointer<unqlite_int64>)>>
       xFileSize;
 
   external ffi.Pointer<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite_file>, ffi.Int32)>> xLock;
+          ffi.Int Function(ffi.Pointer<unqlite_file>, ffi.Int)>> xLock;
 
   external ffi.Pointer<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite_file>, ffi.Int32)>> xUnlock;
+          ffi.Int Function(ffi.Pointer<unqlite_file>, ffi.Int)>> xUnlock;
 
   external ffi.Pointer<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<unqlite_file>, ffi.Pointer<ffi.Int32>)>>
+              ffi.Int Function(
+                  ffi.Pointer<unqlite_file>, ffi.Pointer<ffi.Int>)>>
       xCheckReservedLock;
 
   external ffi.Pointer<
-          ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite_file>)>>
+          ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_file>)>>
       xSectorSize;
 }
 
@@ -1354,23 +1521,23 @@ class unqlite_file extends ffi.Struct {
 }
 
 typedef unqlite_int64 = sxi64;
-typedef sxi64 = ffi.Int64;
+typedef sxi64 = ffi.LongLong;
 
 class unqlite_kv_methods extends ffi.Struct {
-  external ffi.Pointer<ffi.Int8> zName;
+  external ffi.Pointer<ffi.Char> zName;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int szKv;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int szCursor;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int iVersion;
 
   external ffi.Pointer<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite_kv_engine>, ffi.Int32)>> xInit;
+          ffi.Int Function(ffi.Pointer<unqlite_kv_engine>, ffi.Int)>> xInit;
 
   external ffi.Pointer<
           ffi.NativeFunction<ffi.Void Function(ffi.Pointer<unqlite_kv_engine>)>>
@@ -1378,28 +1545,28 @@ class unqlite_kv_methods extends ffi.Struct {
 
   external ffi.Pointer<
       ffi.NativeFunction<
-          ffi.Int32 Function(
-              ffi.Pointer<unqlite_kv_engine>, ffi.Int32, va_list)>> xConfig;
+          ffi.Int Function(
+              ffi.Pointer<unqlite_kv_engine>, ffi.Int, va_list)>> xConfig;
 
   external ffi.Pointer<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite_kv_engine>, pgno)>> xOpen;
+          ffi.Int Function(ffi.Pointer<unqlite_kv_engine>, pgno)>> xOpen;
 
   external ffi.Pointer<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<unqlite_kv_engine>,
               ffi.Pointer<ffi.Void>,
-              ffi.Int32,
+              ffi.Int,
               ffi.Pointer<ffi.Void>,
               unqlite_int64)>> xReplace;
 
   external ffi.Pointer<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<unqlite_kv_engine>,
               ffi.Pointer<ffi.Void>,
-              ffi.Int32,
+              ffi.Int,
               ffi.Pointer<ffi.Void>,
               unqlite_int64)>> xAppend;
 
@@ -1409,62 +1576,62 @@ class unqlite_kv_methods extends ffi.Struct {
 
   external ffi.Pointer<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite_kv_cursor>,
-              ffi.Pointer<ffi.Void>, ffi.Int32, ffi.Int32)>> xSeek;
+          ffi.Int Function(ffi.Pointer<unqlite_kv_cursor>,
+              ffi.Pointer<ffi.Void>, ffi.Int, ffi.Int)>> xSeek;
 
   external ffi.Pointer<
-      ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite_kv_cursor>)>> xFirst;
+          ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_kv_cursor>)>>
+      xFirst;
 
   external ffi.Pointer<
-      ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite_kv_cursor>)>> xLast;
+          ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_kv_cursor>)>>
+      xLast;
 
   external ffi.Pointer<
-      ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite_kv_cursor>)>> xValid;
+          ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_kv_cursor>)>>
+      xValid;
 
   external ffi.Pointer<
-      ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite_kv_cursor>)>> xNext;
+          ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_kv_cursor>)>>
+      xNext;
 
   external ffi.Pointer<
-      ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite_kv_cursor>)>> xPrev;
+          ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_kv_cursor>)>>
+      xPrev;
 
   external ffi.Pointer<
-      ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite_kv_cursor>)>> xDelete;
+          ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_kv_cursor>)>>
+      xDelete;
 
   external ffi.Pointer<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<unqlite_kv_cursor>, ffi.Pointer<ffi.Int32>)>>
+              ffi.Int Function(
+                  ffi.Pointer<unqlite_kv_cursor>, ffi.Pointer<ffi.Int>)>>
       xKeyLength;
 
   external ffi.Pointer<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<unqlite_kv_cursor>,
               ffi.Pointer<
                   ffi.NativeFunction<
-                      ffi.Int32 Function(ffi.Pointer<ffi.Void>, ffi.Uint32,
+                      ffi.Int Function(ffi.Pointer<ffi.Void>, ffi.UnsignedInt,
                           ffi.Pointer<ffi.Void>)>>,
               ffi.Pointer<ffi.Void>)>> xKey;
 
   external ffi.Pointer<
           ffi.NativeFunction<
-              ffi.Int32 Function(
+              ffi.Int Function(
                   ffi.Pointer<unqlite_kv_cursor>, ffi.Pointer<unqlite_int64>)>>
       xDataLength;
 
   external ffi.Pointer<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               ffi.Pointer<unqlite_kv_cursor>,
               ffi.Pointer<
                   ffi.NativeFunction<
-                      ffi.Int32 Function(ffi.Pointer<ffi.Void>, ffi.Uint32,
+                      ffi.Int Function(ffi.Pointer<ffi.Void>, ffi.UnsignedInt,
                           ffi.Pointer<ffi.Void>)>>,
               ffi.Pointer<ffi.Void>)>> xData;
 
@@ -1488,53 +1655,50 @@ class unqlite_kv_io extends ffi.Struct {
 
   external ffi.Pointer<
       ffi.NativeFunction<
-          ffi.Int32 Function(unqlite_kv_handle, pgno,
+          ffi.Int Function(unqlite_kv_handle, pgno,
               ffi.Pointer<ffi.Pointer<unqlite_page>>)>> xGet;
 
   external ffi.Pointer<
       ffi.NativeFunction<
-          ffi.Int32 Function(unqlite_kv_handle, pgno,
+          ffi.Int Function(unqlite_kv_handle, pgno,
               ffi.Pointer<ffi.Pointer<unqlite_page>>)>> xLookup;
 
   external ffi.Pointer<
       ffi.NativeFunction<
-          ffi.Int32 Function(
+          ffi.Int Function(
               unqlite_kv_handle, ffi.Pointer<ffi.Pointer<unqlite_page>>)>> xNew;
 
   external ffi.Pointer<
-      ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite_page>)>> xWrite;
+      ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_page>)>> xWrite;
 
   external ffi.Pointer<
-          ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite_page>)>>
+          ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_page>)>>
       xDontWrite;
 
   external ffi.Pointer<
-          ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite_page>)>>
+          ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_page>)>>
       xDontJournal;
 
   external ffi.Pointer<
-          ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite_page>)>>
+          ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_page>)>>
       xDontMkHot;
 
   external ffi.Pointer<
-          ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite_page>)>>
-      xPageRef;
+      ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_page>)>> xPageRef;
 
   external ffi.Pointer<
-          ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<unqlite_page>)>>
+          ffi.NativeFunction<ffi.Int Function(ffi.Pointer<unqlite_page>)>>
       xPageUnref;
 
-  external ffi
-          .Pointer<ffi.NativeFunction<ffi.Int32 Function(unqlite_kv_handle)>>
+  external ffi.Pointer<ffi.NativeFunction<ffi.Int Function(unqlite_kv_handle)>>
       xPageSize;
 
-  external ffi
-          .Pointer<ffi.NativeFunction<ffi.Int32 Function(unqlite_kv_handle)>>
+  external ffi.Pointer<ffi.NativeFunction<ffi.Int Function(unqlite_kv_handle)>>
       xReadOnly;
 
   external ffi.Pointer<
       ffi.NativeFunction<
-          ffi.Pointer<ffi.Uint8> Function(unqlite_kv_handle)>> xTmpPage;
+          ffi.Pointer<ffi.UnsignedChar> Function(unqlite_kv_handle)>> xTmpPage;
 
   external ffi.Pointer<
       ffi.NativeFunction<
@@ -1554,15 +1718,15 @@ class unqlite_kv_io extends ffi.Struct {
 
   external ffi.Pointer<
       ffi.NativeFunction<
-          ffi.Void Function(unqlite_kv_handle, ffi.Pointer<ffi.Int8>)>> xErr;
+          ffi.Void Function(unqlite_kv_handle, ffi.Pointer<ffi.Char>)>> xErr;
 }
 
 typedef unqlite_kv_handle = ffi.Pointer<ffi.Void>;
 typedef pgno = sxu64;
-typedef sxu64 = ffi.Uint64;
+typedef sxu64 = ffi.UnsignedLongLong;
 
 class unqlite_page extends ffi.Struct {
-  external ffi.Pointer<ffi.Uint8> zData;
+  external ffi.Pointer<ffi.UnsignedChar> zData;
 
   external ffi.Pointer<ffi.Void> pUserData;
 
@@ -1570,7 +1734,7 @@ class unqlite_page extends ffi.Struct {
   external int pgno;
 }
 
-typedef va_list = ffi.Pointer<ffi.Int8>;
+typedef va_list = ffi.Pointer<ffi.Char>;
 
 class unqlite_kv_cursor extends ffi.Struct {
   external ffi.Pointer<unqlite_kv_engine> pStore;
@@ -1583,91 +1747,91 @@ class jx9_context extends ffi.Opaque {}
 class jx9_value extends ffi.Opaque {}
 
 class unqlite_vfs extends ffi.Struct {
-  external ffi.Pointer<ffi.Int8> zName;
+  external ffi.Pointer<ffi.Char> zName;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int iVersion;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int szOsFile;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int mxPathname;
 
   external ffi.Pointer<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite_vfs>, ffi.Pointer<ffi.Int8>,
-              ffi.Pointer<unqlite_file>, ffi.Uint32)>> xOpen;
+          ffi.Int Function(ffi.Pointer<unqlite_vfs>, ffi.Pointer<ffi.Char>,
+              ffi.Pointer<unqlite_file>, ffi.UnsignedInt)>> xOpen;
 
   external ffi.Pointer<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<unqlite_vfs>, ffi.Pointer<ffi.Int8>, ffi.Int32)>>
+              ffi.Int Function(
+                  ffi.Pointer<unqlite_vfs>, ffi.Pointer<ffi.Char>, ffi.Int)>>
       xDelete;
 
   external ffi.Pointer<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite_vfs>, ffi.Pointer<ffi.Int8>,
-              ffi.Int32, ffi.Pointer<ffi.Int32>)>> xAccess;
+          ffi.Int Function(ffi.Pointer<unqlite_vfs>, ffi.Pointer<ffi.Char>,
+              ffi.Int, ffi.Pointer<ffi.Int>)>> xAccess;
 
   external ffi.Pointer<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite_vfs>, ffi.Pointer<ffi.Int8>,
-              ffi.Int32, ffi.Pointer<ffi.Int8>)>> xFullPathname;
+          ffi.Int Function(ffi.Pointer<unqlite_vfs>, ffi.Pointer<ffi.Char>,
+              ffi.Int, ffi.Pointer<ffi.Char>)>> xFullPathname;
 
   external ffi.Pointer<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<unqlite_vfs>, ffi.Pointer<ffi.Int8>, ffi.Int32)>>
+              ffi.Int Function(
+                  ffi.Pointer<unqlite_vfs>, ffi.Pointer<ffi.Char>, ffi.Int)>>
       xTmpDir;
 
   external ffi.Pointer<
       ffi.NativeFunction<
-          ffi.Int32 Function(ffi.Pointer<unqlite_vfs>, ffi.Int32)>> xSleep;
+          ffi.Int Function(ffi.Pointer<unqlite_vfs>, ffi.Int)>> xSleep;
 
   external ffi.Pointer<
           ffi.NativeFunction<
-              ffi.Int32 Function(ffi.Pointer<unqlite_vfs>, ffi.Pointer<Sytm>)>>
+              ffi.Int Function(ffi.Pointer<unqlite_vfs>, ffi.Pointer<Sytm>)>>
       xCurrentTime;
 
   external ffi.Pointer<
           ffi.NativeFunction<
-              ffi.Int32 Function(
-                  ffi.Pointer<unqlite_vfs>, ffi.Int32, ffi.Pointer<ffi.Int8>)>>
+              ffi.Int Function(
+                  ffi.Pointer<unqlite_vfs>, ffi.Int, ffi.Pointer<ffi.Char>)>>
       xGetLastError;
 }
 
 class Sytm extends ffi.Struct {
-  @ffi.Int32()
+  @ffi.Int()
   external int tm_sec;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int tm_min;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int tm_hour;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int tm_mday;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int tm_mon;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int tm_year;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int tm_wday;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int tm_yday;
 
-  @ffi.Int32()
+  @ffi.Int()
   external int tm_isdst;
 
-  external ffi.Pointer<ffi.Int8> tm_zone;
+  external ffi.Pointer<ffi.Char> tm_zone;
 
-  @ffi.Int64()
+  @ffi.Long()
   external int tm_gmtoff;
 }
 
@@ -1676,13 +1840,12 @@ class unqlite_vm extends ffi.Opaque {}
 class unqlite extends ffi.Opaque {}
 
 class SyMutexMethods extends ffi.Struct {
-  external ffi.Pointer<ffi.NativeFunction<ffi.Int32 Function()>> xGlobalInit;
+  external ffi.Pointer<ffi.NativeFunction<ffi.Int Function()>> xGlobalInit;
 
   external ffi.Pointer<ffi.NativeFunction<ffi.Void Function()>> xGlobalRelease;
 
   external ffi
-          .Pointer<ffi.NativeFunction<ffi.Pointer<SyMutex> Function(ffi.Int32)>>
-      xNew;
+      .Pointer<ffi.NativeFunction<ffi.Pointer<SyMutex> Function(ffi.Int)>> xNew;
 
   external ffi
           .Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<SyMutex>)>>
@@ -1693,7 +1856,7 @@ class SyMutexMethods extends ffi.Struct {
       xEnter;
 
   external ffi
-          .Pointer<ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<SyMutex>)>>
+          .Pointer<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<SyMutex>)>>
       xTryEnter;
 
   external ffi
@@ -1705,23 +1868,25 @@ class SyMutex extends ffi.Opaque {}
 
 class SyMemMethods extends ffi.Struct {
   external ffi.Pointer<
-      ffi.NativeFunction<ffi.Pointer<ffi.Void> Function(ffi.Uint32)>> xAlloc;
+          ffi.NativeFunction<ffi.Pointer<ffi.Void> Function(ffi.UnsignedInt)>>
+      xAlloc;
 
   external ffi.Pointer<
       ffi.NativeFunction<
           ffi.Pointer<ffi.Void> Function(
-              ffi.Pointer<ffi.Void>, ffi.Uint32)>> xRealloc;
+              ffi.Pointer<ffi.Void>, ffi.UnsignedInt)>> xRealloc;
 
   external ffi
           .Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>
       xFree;
 
   external ffi.Pointer<
-          ffi.NativeFunction<ffi.Uint32 Function(ffi.Pointer<ffi.Void>)>>
+          ffi.NativeFunction<ffi.UnsignedInt Function(ffi.Pointer<ffi.Void>)>>
       xChunkSize;
 
-  external ffi.Pointer<
-      ffi.NativeFunction<ffi.Int32 Function(ffi.Pointer<ffi.Void>)>> xInit;
+  external ffi
+          .Pointer<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<ffi.Void>)>>
+      xInit;
 
   external ffi
           .Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>
@@ -1731,20 +1896,21 @@ class SyMemMethods extends ffi.Struct {
 }
 
 class SyString extends ffi.Struct {
-  external ffi.Pointer<ffi.Int8> zString;
+  external ffi.Pointer<ffi.Char> zString;
 
-  @ffi.Uint32()
+  @ffi.UnsignedInt()
   external int nByte;
 }
 
 class syiovec extends ffi.Struct {
-  @ffi.Uint64()
+  @ffi.UnsignedLong()
   external int nLen;
 
-  external ffi.Pointer<ffi.Int8> pBase;
+  external ffi.Pointer<ffi.Char> pBase;
 }
 
 typedef unqlite_value = jx9_value;
+typedef unqlite_context = jx9_context;
 
 const int _VCRT_COMPILER_PREPROCESSOR = 1;
 

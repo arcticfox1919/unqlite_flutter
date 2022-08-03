@@ -1,4 +1,3 @@
-
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
@@ -6,8 +5,11 @@ import 'dart:io';
 import 'dart:ffi' as ffi;
 import 'dart:typed_data';
 import 'package:ffi/ffi.dart';
+import 'jx9_script.dart';
 import 'unqlite_bindings.dart';
+
 part 'internal.dart';
+
 part 'cursor_iterator.dart';
 
 typedef FetchCallback = void Function(dynamic);
@@ -30,26 +32,33 @@ ffi.DynamicLibrary _load() {
   return ffi.DynamicLibrary.open(path);
 }
 
+UnQLiteBindings? _bindings;
+
+UnQLiteBindings get _unqlite {
+  _bindings ??= UnQLiteBindings(_load());
+  return _bindings!;
+}
+
 class UnQLite {
-  final ffi.DynamicLibrary _dylib;
-  late UnQLiteBindings _unqlite;
   late ffi.Pointer<unqlite> _pdb;
   bool _isOpen = false;
 
-  UnQLite.lazy():_dylib = _load();
+  UnQLite.lazy();
 
   UnQLite.memory() : this.open(':mem:');
 
-  UnQLite.open(String filename, [int flags = UNQLITE_OPEN_CREATE]):_dylib = _load(){
-    open(filename,flags);
+  UnQLite.open(String filename, [int flags = UNQLITE_OPEN_CREATE]) {
+    open(filename, flags);
   }
 
-  void open(String filename, [int flags = UNQLITE_OPEN_CREATE]){
-    if(!_isOpen){
-      _unqlite = UnQLiteBindings(_dylib);
+  void open(String filename, [int flags = UNQLITE_OPEN_CREATE]) {
+    if (!_isOpen) {
       using((Arena arena) {
         var ppDB = arena<ffi.Pointer<unqlite>>();
-        _checkCallRet(_unqlite.unqlite_open(ppDB, filename.toNativeUtf8(allocator: arena).cast(), flags), 'unqlite_open');
+        _checkCallRet(
+            _unqlite.unqlite_open(
+                ppDB, filename.toNativeUtf8(allocator: arena).cast(), flags),
+            'unqlite_open');
         _pdb = ppDB.value;
       });
       _isOpen = true;
@@ -89,8 +98,9 @@ class UnQLite {
   bool exists(key) {
     return using((arena) {
       var tuple = _checkKey(key, arena);
-      var pLen = arena<ffi.Int64>();
-      var r = _unqlite.unqlite_kv_fetch(_pdb, tuple.i1, tuple.i2, ffi.nullptr, pLen);
+      var pLen = arena<ffi.LongLong>();
+      var r = _unqlite.unqlite_kv_fetch(
+          _pdb, tuple.i1, tuple.i2, ffi.nullptr, pLen);
       if (r == UNQLITE_OK) {
         return true;
       } else if (r == UNQLITE_NOTFOUND) {
@@ -111,42 +121,53 @@ class UnQLite {
     });
   }
 
-  String? _getLastError(){
-    return using((arena){
-      var pLen = arena<ffi.Int32>();
-      var ppBuf = arena<ffi.Pointer<ffi.Uint8>>();
-      var ret = _unqlite.unqlite_config(_pdb,UNQLITE_CONFIG_ERR_LOG,ppBuf,pLen);
-      var size = pLen.value;
-      if(ret != UNQLITE_OK || size == 0){
-        return null;
-      }
+  // String? _getLastError() {
+  //   return using((arena) {
+  //     var pLen = arena<ffi.Int32>();
+  //     var ppBuf = arena<ffi.Pointer<ffi.Uint8>>();
+  //     var ret =
+  //         _unqlite.unqlite_config(_pdb, UNQLITE_CONFIG_ERR_LOG, ppBuf, pLen);
+  //     var size = pLen.value;
+  //     if (ret != UNQLITE_OK || size == 0) {
+  //       return null;
+  //     }
+  //
+  //     var pBuf = ppBuf.value as ffi.Pointer<Utf8>;
+  //     return pBuf.toDartString(length: size);
+  //   });
+  // }
 
-      var pBuf = ppBuf.value as ffi.Pointer<Utf8>;
-      return pBuf.toDartString(length: size);
-    });
+  Collection collection(String name) {
+    return Collection(_pdb, name);
   }
 
-  Collection collection() {
-    return Collection();
+  Jx9VM vm(String code){
+    return Jx9VM(_pdb, code);
   }
 
   Transaction transaction() {
-    return Transaction._(_pdb, _unqlite);
+    return Transaction._(_pdb);
   }
 
   Cursor cursor() {
-    return Cursor._(_pdb, _unqlite);
+    return Cursor._(_pdb);
   }
 
   R? fetch<R>(key) {
     return using((Arena arena) {
       var tuple = _checkKey(key, arena);
-      var pLen = arena<ffi.Int64>();
-      int r = _checkCallRet(_unqlite.unqlite_kv_fetch(_pdb, tuple.i1, tuple.i2, ffi.nullptr, pLen), 'unqlite_kv_fetch');
-      if(r == UNQLITE_NOTFOUND) return null;
+      var pLen = arena<ffi.LongLong>();
+      int r = _checkCallRet(
+          _unqlite.unqlite_kv_fetch(
+              _pdb, tuple.i1, tuple.i2, ffi.nullptr, pLen),
+          'unqlite_kv_fetch');
+      if (r == UNQLITE_NOTFOUND) return null;
       var len = pLen.value;
       var pVal = arena<ffi.Uint8>(len);
-      _checkCallRet(_unqlite.unqlite_kv_fetch(_pdb, tuple.i1, tuple.i2, pVal.cast(), pLen), 'unqlite_kv_fetch');
+      _checkCallRet(
+          _unqlite.unqlite_kv_fetch(
+              _pdb, tuple.i1, tuple.i2, pVal.cast(), pLen),
+          'unqlite_kv_fetch');
       return _convertBy<R>(pVal, len);
     });
   }
@@ -159,20 +180,24 @@ class UnQLite {
       var pParam = arena<_CallbackParam>();
       pParam.ref.type = _checkResult<R>().index;
       pParam.ref.timestamp = timestamp;
-      _checkCallRet(_unqlite.unqlite_kv_fetch_callback(_pdb, tuple.i1, tuple.i2, ffi.Pointer.fromFunction(_callback, 404), pParam.cast()), 'unqlite_kv_fetch_callback');
+      _checkCallRet(
+          _unqlite.unqlite_kv_fetch_callback(_pdb, tuple.i1, tuple.i2,
+              ffi.Pointer.fromFunction(_callback, 404), pParam.cast()),
+          'unqlite_kv_fetch_callback');
     });
   }
 
   get isOpen => _isOpen;
 
   void close() {
-    if(_isOpen){
+    if (_isOpen) {
       _unqlite.unqlite_close(_pdb);
       _isOpen = false;
     }
   }
 
-  static int _callback(ffi.Pointer<ffi.Void> pData, int dataLen, ffi.Pointer<ffi.Void> pUserData) {
+  static int _callback(ffi.Pointer<ffi.Void> pData, int dataLen,
+      ffi.Pointer<ffi.Void> pUserData) {
     ffi.Pointer<_CallbackParam> pParam = pUserData.cast();
     int timestamp = pParam.ref.timestamp;
     if (_listener[timestamp] != null) {
@@ -217,7 +242,7 @@ R _convertBy<R>(ffi.Pointer<ffi.Uint8> val, int length) {
     return bd.getFloat64(0) as R;
   } else if (R == String) {
     return utf8.decode(byteArr) as R;
-  } else{
+  } else {
     throw Exception('Unsupported conversion type: $R !!!');
   }
 }

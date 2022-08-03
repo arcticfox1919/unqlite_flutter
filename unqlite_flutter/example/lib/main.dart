@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
@@ -13,11 +15,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Future<void> testDatabase() async {
+  Future<void> testUnqlite() async {
     var appDocDir = await getApplicationDocumentsDirectory();
     final start = DateTime.now().millisecondsSinceEpoch;
 
-    UnQLite db = UnQLite.open("${appDocDir.path}/test.db");
+    UnQLite db = UnQLite.open("${appDocDir.path}/test1.db");
     db.store("name", "Alex");
     db.store("age", 18);
     db.store(19, "haha");
@@ -92,13 +94,20 @@ class _MyAppState extends State<MyApp> {
           title: const Text('UnQLite app'),
         ),
         body: Center(
-          child: Text('Running'),
-        ),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.timer),
-          onPressed: () {
-            testDatabase();
-          },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton(onPressed: (){
+                testUnqlite();
+              }, child: Text('testUnqlite')),
+              ElevatedButton(onPressed: (){
+                testHive();
+              }, child: Text('testHive')),
+              ElevatedButton(onPressed: (){
+                testJSON();
+              }, child: Text('testJSON'))
+            ],
+          ),
         ),
       ),
     );
@@ -132,5 +141,51 @@ class _MyAppState extends State<MyApp> {
     debugPrint("Hive init:$p1 ms");
     debugPrint("put :$p2 ms");
     debugPrint("get :$p3 ms");
+  }
+
+  testJSON()async{
+    var appDocDir = await getApplicationDocumentsDirectory();
+    final start = DateTime.now().millisecondsSinceEpoch;
+
+    UnQLite db = UnQLite.open("${appDocDir.path}/test2.db");
+    var users = db.collection("users");
+    users.create();
+
+    final t1 = DateTime.now().millisecondsSinceEpoch;
+
+    users.store(jsonDecode('''
+{
+        "title": "test json string",
+        "author": [
+                "arcticfox1919"
+        ],
+        "year": 2022,
+        "like": "flutter"
+}
+    '''));
+    users.store({'name': 'Mickey', 'age': 17});
+    users.store([
+      {'name': 'Alice', 'age': 18},
+      {'name': 'Bruce', 'age': 19},
+      {'name': 'Charlie', 'age': 20},
+    ]);
+    final t2 = DateTime.now().millisecondsSinceEpoch;
+    print('> ------------------------------------------------------- <');
+    print(users.all());
+    // print(users.fetch(0));
+    // print(users.fetch(1));
+    // print(users.fetch(2));
+    // print(users.errorLog());
+    final t3 = DateTime.now().millisecondsSinceEpoch;
+
+    print(users.creationDate());
+    print(users.len());
+    print(users.fetchCurrent());
+    users.drop();
+
+    debugPrint("UnQLite collection init:${t1 - start} ms");
+    debugPrint("UnQLite collection store:${t2 - t1} ms");
+    debugPrint("UnQLite collection all:${t3 - t2} ms");
+    db.close();
   }
 }

@@ -7,15 +7,17 @@ Note that currently only the key-value store is wrapped.
 Todo:
 
 - [x]  key-value store
-- [ ]  JSON document store
+- [x]  JSON document store
 
 ## Usage
+
+###  key-value store
 
 Add dependencies：
 
 ```yaml
-  unqlite: ^0.0.2
-  unqlite_flutter: ^0.0.2
+  unqlite: latest 
+  unqlite_flutter: latest 
 ```
 
 Simple key-value store:
@@ -77,10 +79,54 @@ for (var entry in db.cursor()) {
 }
 ```
 
+### JSON
+
+```dart
+    UnQLite db = UnQLite.open("${appDocDir.path}/test2.db");
+    var users = db.collection("users");
+	// Create a collection
+    users.create();
+
+	// Save JSON
+    users.store(jsonDecode('''
+{
+        "title": "test json string",
+        "author": [
+                "arcticfox1919"
+        ],
+        "year": 2022,
+        "like": "flutter"
+}
+    '''));
+
+    users.store({'name': 'Mickey', 'age': 17});
+    users.store([
+      {'name': 'Alice', 'age': 18},
+      {'name': 'Bruce', 'age': 19},
+      {'name': 'Charlie', 'age': 20},
+    ]);
+
+	// Get all
+    print(users.all());
+    // print(users.fetch(0));
+    // print(users.fetch(1));
+    // print(users.fetch(2));
+    // print(users.errorLog());
+
+    print(users.creationDate());
+    print(users.len());
+    print(users.fetchCurrent());
+
+    // Delete all
+    users.drop();
+    db.close();
+```
+
+
 ## Why use it
 
 - Faster than Hive and takes up less memory
-- Can support JSON documents (not yet finished wrapping)
+- Can support JSON documents 
 
 What are the drawbacks?  Because dart ffi is used, it cannot be used on the web.
 
