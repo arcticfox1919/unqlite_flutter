@@ -2,8 +2,6 @@
 
 UnQLite database plugin wrapped for flutter.UnQLite is an embedded NoSql database, see [here](https://github.com/symisc/unqlite) for details.
 
-Note that currently only the key-value store is wrapped.
-
 Todo:
 
 - [x]  key-value store
